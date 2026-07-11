@@ -2,10 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
-import KeycloakArchitecture from '../components/KeycloakArchitecture';
+import DefaultArchitecture from '../components/DefaultArchitecture';
 ---
 
-<Layout title="Managed Keycloak with YugabyteDB - SavvyTechies" description="Enterprise-grade managed Keycloak authentication service with YugabyteDB backend. 99.99% SLA, multi-cloud deployment, and AI-powered operations.">
+<Layout title="Managed Keycloak - SavvyTechies" description="Enterprise-grade managed Keycloak authentication service on AWS with an Aurora PostgreSQL backend. Tiered SLA up to 99.99%, optional multi-cloud standby, and AI-powered operations.">
   <Navigation />
 
   <!-- Hero Section -->
@@ -14,7 +14,7 @@ import KeycloakArchitecture from '../components/KeycloakArchitecture';
       <div class="text-center">
         <div class="text-6xl mb-4">🔐</div>
         <h1 class="text-4xl md:text-5xl font-bold mb-4">
-          Managed Keycloak with YugabyteDB
+          Managed Keycloak
         </h1>
         <p class="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto mb-8">
           Enterprise authentication and authorization that scales globally with unmatched reliability
@@ -44,7 +44,7 @@ import KeycloakArchitecture from '../components/KeycloakArchitecture';
             Keycloak is a powerful open-source identity and access management solution. But running it at scale with high availability across multiple clouds requires significant expertise and operational overhead.
           </p>
           <p class="text-lg text-gray-700 mb-6">
-            SavvyTechies provides a fully managed Keycloak service with YugabyteDB as the backend, giving you enterprise-grade authentication without the operational complexity.
+            SavvyTechies provides a fully managed Keycloak service on AWS with an Aurora PostgreSQL backend, giving you enterprise-grade authentication without the operational complexity.
           </p>
           <div class="space-y-4">
             <div class="flex items-start">
@@ -62,7 +62,7 @@ import KeycloakArchitecture from '../components/KeycloakArchitecture';
               </svg>
               <div>
                 <div class="font-semibold">Global Scale</div>
-                <div class="text-gray-600">YugabyteDB provides multi-region active-active replication</div>
+                <div class="text-gray-600">Aurora PostgreSQL Multi-AZ, with multi-region active-passive DR (Aurora Global)</div>
               </div>
             </div>
             <div class="flex items-start">
@@ -70,8 +70,8 @@ import KeycloakArchitecture from '../components/KeycloakArchitecture';
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
               </svg>
               <div>
-                <div class="font-semibold">True Multi-Cloud</div>
-                <div class="text-gray-600">Deploy across AWS, Azure, and GCP without vendor lock-in</div>
+                <div class="font-semibold">Multi-Cloud Optional</div>
+                <div class="text-gray-600">Premium cross-cloud warm standby (AWS→Azure) for DR and data sovereignty</div>
               </div>
             </div>
           </div>
@@ -147,14 +147,14 @@ import KeycloakArchitecture from '../components/KeycloakArchitecture';
       <h2 class="text-3xl font-bold text-center mb-12">Architecture Overview</h2>
 
       <div class="bg-white rounded-xl shadow-lg p-8">
-        <KeycloakArchitecture client:load />
+        <DefaultArchitecture client:visible />
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
         <div class="bg-white rounded-lg p-6 shadow">
           <h3 class="text-lg font-bold mb-3">High Availability</h3>
           <p class="text-gray-600">
-            Active-active deployment across multiple clouds ensures zero downtime during failures or maintenance.
+            Multi-AZ clustering by default, with multi-region active-passive failover (RTO ~1 min) on higher tiers.
           </p>
         </div>
         <div class="bg-white rounded-lg p-6 shadow">
@@ -216,7 +216,7 @@ import KeycloakArchitecture from '../components/KeycloakArchitecture';
               <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
               </svg>
-              <span>HIPAA & SOC 2 compliant</span>
+              <span>SOC 2 &amp; HIPAA-ready controls</span>
             </li>
             <li class="flex items-center">
               <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -295,7 +295,7 @@ import KeycloakArchitecture from '../components/KeycloakArchitecture';
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl font-bold mb-4">Ready to Get Started?</h2>
       <p class="text-xl text-blue-100 mb-8">
-        Start with Professional tier at $24K/year or contact us for Enterprise pricing
+        Start with Professional tier at $45K/year or contact us for Enterprise pricing
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a href="/#contact" class="bg-white text-primary-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">

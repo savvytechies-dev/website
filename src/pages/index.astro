@@ -33,7 +33,7 @@ import ROICalculator from '../components/ROICalculator';
           </a>
         </div>
         <p class="text-sm text-blue-100 mt-4">
-          No credit card required • Multi-cloud HA • Zero vendor lock-in
+          No credit card required • Multi-region HA • Zero vendor lock-in
         </p>
       </div>
 
@@ -48,12 +48,12 @@ import ROICalculator from '../components/ROICalculator';
           <div class="text-blue-100">AI Setup Time</div>
         </div>
         <div class="text-center">
-          <div class="text-4xl font-bold mb-2">99.9%</div>
-          <div class="text-blue-100">Uptime SLA</div>
+          <div class="text-4xl font-bold mb-2">99.9–99.99%</div>
+          <div class="text-blue-100">Uptime SLA (by tier)</div>
         </div>
         <div class="text-center">
-          <div class="text-4xl font-bold mb-2">3 Clouds</div>
-          <div class="text-blue-100">AWS, Azure, GCP</div>
+          <div class="text-4xl font-bold mb-2">Multi-Region</div>
+          <div class="text-blue-100">HA + optional multi-cloud</div>
         </div>
       </div>
     </div>
@@ -79,9 +79,9 @@ import ROICalculator from '../components/ROICalculator';
         </div>
         <div class="text-center p-6">
           <div class="text-4xl mb-4">☁️</div>
-          <h3 class="text-xl font-bold mb-3">Multi-Cloud HA</h3>
+          <h3 class="text-xl font-bold mb-3">Multi-Region HA (Multi-Cloud Optional)</h3>
           <p class="text-gray-600">
-            True redundancy across AWS, Azure, and GCP. Zero vendor lock-in. Automatic failover in under 90 seconds.
+            Multi-AZ by default, multi-region active-passive DR, and an optional cross-cloud warm standby for data sovereignty and no vendor lock-in.
           </p>
         </div>
       </div>
@@ -251,7 +251,7 @@ import ROICalculator from '../components/ROICalculator';
             </svg>
           </div>
           <h3 class="text-xl font-bold mb-2">Zero Vendor Lock-In</h3>
-          <p class="text-gray-600">Multi-cloud HA across AWS, Azure, GCP. 100% open-source Keycloak core.</p>
+          <p class="text-gray-600">100% open-source Keycloak core. Optional cross-cloud standby (AWS→Azure). Export your realms and users anytime.</p>
         </div>
 
         <div class="text-center bg-white p-6 rounded-xl shadow-sm">
@@ -270,8 +270,8 @@ import ROICalculator from '../components/ROICalculator';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
             </svg>
           </div>
-          <h3 class="text-xl font-bold mb-2">99.9% Uptime SLA</h3>
-          <p class="text-gray-600">Automatic failover in 90 seconds. AI-powered monitoring. 24/7 support.</p>
+          <h3 class="text-xl font-bold mb-2">Tiered Uptime SLA</h3>
+          <p class="text-gray-600">99.9% single-region, 99.95% multi-region active-passive, 99.99% active-active multi-cloud. AI-powered monitoring. 24/7 support.</p>
         </div>
       </div>
     </div>
@@ -563,7 +563,7 @@ import ROICalculator from '../components/ROICalculator';
                   <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                   </svg>
-                  <span>True multi-cloud deployment</span>
+                  <span>Multi-region HA (multi-cloud standby available)</span>
                 </li>
                 <li class="flex items-start">
                   <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -575,7 +575,7 @@ import ROICalculator from '../components/ROICalculator';
                   <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                   </svg>
-                  <span>99.99% SLA</span>
+                  <span>Up to 99.99% SLA (by architecture tier)</span>
                 </li>
                 <li class="flex items-start">
                   <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

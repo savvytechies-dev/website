@@ -9,10 +9,10 @@ const currentStatus = {
   overall: 'operational', // 'operational' | 'degraded' | 'outage'
   lastUpdated: new Date().toISOString(),
   services: [
-    { name: 'Keycloak Authentication API', status: 'operational', region: 'Multi-Cloud' },
-    { name: 'Admin Dashboard', status: 'operational', region: 'Multi-Cloud' },
-    { name: 'Database (YugabyteDB)', status: 'operational', region: 'Multi-Cloud' },
-    { name: 'Monitoring & Alerts', status: 'operational', region: 'Multi-Cloud' },
+    { name: 'Keycloak Authentication API', status: 'operational', region: 'AWS us-east-1' },
+    { name: 'Admin Dashboard', status: 'operational', region: 'AWS us-east-1' },
+    { name: 'Database (Aurora PostgreSQL)', status: 'operational', region: 'AWS us-east-1 (Multi-AZ)' },
+    { name: 'Monitoring & Alerts', status: 'operational', region: 'AWS us-east-1' },
   ],
   regions: [
     { name: 'AWS (us-east-1)', status: 'healthy', latency: '45ms' },
