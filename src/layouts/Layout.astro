@@ -19,6 +19,47 @@ const { title, description = "Enterprise-grade multi-cloud managed services for 
   </head>
   <body class="bg-gray-50 text-gray-900">
     <slot />
+
+    <!-- First-party analytics beacon: pageviews + section/CTA clicks. No cookies.
+         Posts to same-origin /collect (routed via CloudFront to the collector Lambda). -->
+    <script>
+      (() => {
+        // Respect Do Not Track.
+        if (navigator.doNotTrack === '1' || (window as any).doNotTrack === '1') return;
+        const ENDPOINT = '/collect';
+        let sid = sessionStorage.getItem('st_sid');
+        if (!sid) {
+          sid = (crypto as any).randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2);
+          sessionStorage.setItem('st_sid', sid);
+        }
+        const send = (payload: Record<string, unknown>) => {
+          try {
+            const body = JSON.stringify({
+              ...payload, sid, path: location.pathname,
+              ts: Date.now(), ref: document.referrer || null,
+            });
+            if (navigator.sendBeacon) {
+              navigator.sendBeacon(ENDPOINT, new Blob([body], { type: 'application/json' }));
+            } else {
+              fetch(ENDPOINT, { method: 'POST', body, keepalive: true,
+                headers: { 'Content-Type': 'application/json' } });
+            }
+          } catch (_) { /* never break the page */ }
+        };
+        // Page view.
+        send({ type: 'pageview', title: document.title });
+        // Click tracking via delegation — captures the section and the element label.
+        document.addEventListener('click', (e) => {
+          const el = (e.target as Element)?.closest('a, button, [data-track]');
+          if (!el) return;
+          const section = el.closest('section[id]')?.id || el.closest('[id]')?.id || null;
+          const label = (el.getAttribute('data-track') || el.textContent
+            || el.getAttribute('aria-label') || '').trim().slice(0, 80);
+          send({ type: 'click', section, label,
+            tag: el.tagName.toLowerCase(), href: el.getAttribute('href') || null });
+        }, { capture: true, passive: true });
+      })();
+    </script>
   </body>
 </html>
 
