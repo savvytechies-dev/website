@@ -34,10 +34,19 @@ export const handler = async (event) => {
     if (event.requestContext?.http?.method === 'OPTIONS') {
       return { statusCode: 204, headers: cors, body: '' };
     }
+    const h = event.headers || {};
+
+    // Restrict to CloudFront: reject direct API calls that lack the shared secret
+    // header CloudFront injects on every /collect origin request. Not enforced until
+    // ORIGIN_SECRET is set (lets us roll it out after the header is propagating).
+    const SECRET = process.env.ORIGIN_SECRET;
+    if (SECRET && h['x-origin-secret'] !== SECRET) {
+      return { statusCode: 403, headers: cors, body: '' };
+    }
+
     let body = event.body || '';
     if (event.isBase64Encoded) body = Buffer.from(body, 'base64').toString('utf8');
     const data = body ? JSON.parse(body) : {};
-    const h = event.headers || {};
 
     // CloudFront-Viewer-Address is "IP:port"; fall back to XFF / sourceIp.
     const rawIp =
