@@ -15,26 +15,32 @@ No third-party trackers; all data stays in your AWS account.
 Browser (Layout.astro beacon)
    │  POST /collect   (navigator.sendBeacon, same-origin)
    ▼
-CloudFront  ──/collect──▶  Collector Lambda (Function URL)
-                                │ writes 1 JSON/event
-                                ▼
+CloudFront ──/collect──▶ API Gateway (HTTP API) ──▶ Collector Lambda
+                          (forwards geo headers)        │ writes 1 JSON/event
+                                                        ▼
                           S3  s3://savvytechies-analytics-events/events/dt=YYYY-MM-DD/
                                 ▲
 EventBridge (daily cron) ──▶ Reporter Lambda ──▶ SES email (HTML report)
 ```
+> Transport note: we front the collector with a **public API Gateway HTTP API**, not
+> the Lambda Function URL. CloudFront OAC → Function URL can't sign POST bodies
+> (`InvalidSignatureException`), so a beacon with a JSON body fails under OAC. API
+> Gateway needs no request signing and still receives the CloudFront geo headers.
+> The Function URL created by `deploy.sh` is now vestigial (IAM-auth, unused).
 
 ## Files
 | File | Purpose |
 |---|---|
 | `../src/layouts/Layout.astro` | client beacon (pageviews + click delegation) |
-| `collector.mjs` | Function-URL Lambda: enrich (IP/geo/UA) + write to S3 |
+| `collector.mjs` | Lambda: enrich (IP/geo/UA) + write to S3 (HTTP API v2.0 event) |
 | `reporter.mjs` | daily Lambda: aggregate yesterday + SES email |
-| `deploy.sh` | provisions S3, IAM, both Lambdas, Function URL, daily schedule |
+| `deploy.sh` | provisions S3, IAM, both Lambdas, daily schedule |
+| `switch-to-apigw.sh` | creates the HTTP API and points CloudFront `/collect` at it |
 
 ## Deploy
 ```bash
-bash analytics/deploy.sh          # backend (S3, Lambdas, schedule)
-# then wire /collect through CloudFront (see deploy.sh output) so the beacon reaches the collector
+bash analytics/deploy.sh            # backend (S3, Lambdas, schedule)
+bash analytics/switch-to-apigw.sh   # HTTP API + wire CloudFront /collect (touches prod dist)
 ```
 
 ## The two decisions (easy to change)

@@ -58,8 +58,11 @@ else
     --role "arn:aws:iam::${ACCOUNT_ID}:role/${COLLECTOR_ROLE}" --zip-file "fileb://$TMP/$COLLECTOR.zip" \
     --timeout 10 --memory-size 128 >/dev/null
 fi
+aws lambda wait function-active-v2 --function-name "$COLLECTOR"
+aws lambda wait function-updated-v2 --function-name "$COLLECTOR"
 aws lambda update-function-configuration --function-name "$COLLECTOR" \
   --environment "Variables={EVENTS_BUCKET=$BUCKET,ANONYMIZE_IP=$ANONYMIZE_IP}" >/dev/null
+aws lambda wait function-updated-v2 --function-name "$COLLECTOR"
 
 echo "==> 4/7 collector Function URL"
 aws lambda create-function-url-config --function-name "$COLLECTOR" --auth-type NONE \
@@ -79,16 +82,25 @@ else
     --role "arn:aws:iam::${ACCOUNT_ID}:role/${REPORTER_ROLE}" --zip-file "fileb://$TMP/$REPORTER.zip" \
     --timeout 120 --memory-size 256 >/dev/null
 fi
+aws lambda wait function-active-v2 --function-name "$REPORTER"
+aws lambda wait function-updated-v2 --function-name "$REPORTER"
 aws lambda update-function-configuration --function-name "$REPORTER" \
   --environment "Variables={EVENTS_BUCKET=$BUCKET,REPORT_SENDER=$REPORT_SENDER,REPORT_RECIPIENT=$REPORT_RECIPIENT,REPORT_TZ_OFFSET=-5}" >/dev/null
+aws lambda wait function-updated-v2 --function-name "$REPORTER"
 
 echo "==> 6/7 daily schedule"
+SCHED_ROLE="st-analytics-scheduler-role"
+SCHED_TRUST='{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Service":"scheduler.amazonaws.com"},"Action":"sts:AssumeRole"}]}'
+aws iam create-role --role-name "$SCHED_ROLE" --assume-role-policy-document "$SCHED_TRUST" 2>/dev/null || echo "   ($SCHED_ROLE exists)"
+aws iam put-role-policy --role-name "$SCHED_ROLE" --policy-name invoke-reporter --policy-document \
+  "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"lambda:InvokeFunction\",\"Resource\":\"arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:${REPORTER}\"}]}"
+sleep 8  # let the scheduler role propagate
 aws scheduler create-schedule --name st-analytics-daily \
   --schedule-expression "$DAILY_SCHEDULE" --flexible-time-window '{"Mode":"OFF"}' \
-  --target "{\"Arn\":\"arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:${REPORTER}\",\"RoleArn\":\"arn:aws:iam::${ACCOUNT_ID}:role/${REPORTER_ROLE}\"}" 2>/dev/null \
-  || echo "   (schedule exists — update via update-schedule)"
-aws lambda add-permission --function-name "$REPORTER" --statement-id sched-invoke \
-  --action lambda:InvokeFunction --principal scheduler.amazonaws.com 2>/dev/null || true
+  --target "{\"Arn\":\"arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:${REPORTER}\",\"RoleArn\":\"arn:aws:iam::${ACCOUNT_ID}:role/${SCHED_ROLE}\"}" 2>/dev/null \
+  || aws scheduler update-schedule --name st-analytics-daily \
+       --schedule-expression "$DAILY_SCHEDULE" --flexible-time-window '{"Mode":"OFF"}' \
+       --target "{\"Arn\":\"arn:aws:lambda:${REGION}:${ACCOUNT_ID}:function:${REPORTER}\",\"RoleArn\":\"arn:aws:iam::${ACCOUNT_ID}:role/${SCHED_ROLE}\"}" >/dev/null
 
 echo "==> 7/7 DONE (backend). Function URL = $FN_URL"
 cat <<EOF
