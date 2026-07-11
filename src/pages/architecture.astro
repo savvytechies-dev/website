@@ -1,0 +1,183 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import DefaultArchitecture from '../components/DefaultArchitecture';
+import CellsArchitecture from '../components/CellsArchitecture';
+import MultiCloudStandby from '../components/MultiCloudStandby';
+---
+
+<Layout
+  title="Platform Architecture - SavvyTechies"
+  description="How SavvyTechies actually runs managed Keycloak: Fargate cells on AWS with a serverless control plane, tiered availability (99.9%/99.95%/99.99%), and optional cross-cloud warm standby."
+>
+  <Navigation />
+
+  <!-- Hero -->
+  <section id="architecture-hero" class="bg-gradient-to-br from-primary-600 to-secondary-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-block bg-white/15 rounded-full px-4 py-1 mb-5 text-sm font-semibold">
+        What we run today — not a roadmap
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Platform Architecture</h1>
+      <p class="text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+        Managed Keycloak on AWS — Fargate cells, a serverless control plane, an Aurora PostgreSQL
+        source of truth, and availability that scales with your architecture tier.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/docs" data-track="architecture-hero-docs" class="bg-white text-primary-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition shadow-lg">
+          Read the full docs →
+        </a>
+        <a href="/#contact" class="border-2 border-white text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-primary-600 transition">
+          Talk to an engineer
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Default architecture -->
+  <section id="default-architecture" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-4">The Default Deployment</h2>
+      <p class="text-lg text-gray-600 text-center max-w-3xl mx-auto mb-12">
+        A stateful data plane on AWS Fargate fronted by CloudFront and an ALB, with everything
+        around Keycloak running serverless in the control plane.
+      </p>
+      <div class="bg-white rounded-xl shadow-lg p-8">
+        <DefaultArchitecture client:visible />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <div class="bg-gray-50 rounded-lg p-6">
+          <h3 class="text-lg font-bold mb-3">Data plane — Fargate (JVM)</h3>
+          <p class="text-gray-600">Long-running, clustered Keycloak (Quarkus) across AZs via JDBC_PING, autoscaled on CPU. Not Lambda, not native — both break the SPIs and clustering the product depends on.</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-6">
+          <h3 class="text-lg font-bold mb-3">Control plane — serverless</h3>
+          <p class="text-gray-600">Provisioning, billing, AI-config, analytics, notifications, and the STS token-broker run on Lambda and drive Keycloak through its Admin REST API.</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-6">
+          <h3 class="text-lg font-bold mb-3">Aurora PostgreSQL</h3>
+          <p class="text-gray-600">Multi-AZ primary + synchronous replica is the source of truth. Sessions persist to the DB (persistent-user-sessions); Infinispan is an in-region near-cache.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scaling / cells -->
+  <section id="scaling-cells" class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-4">Multi-Tenancy That Scales in Cells</h2>
+      <p class="text-lg text-gray-600 text-center max-w-3xl mx-auto mb-12">
+        A cell is a self-contained Keycloak unit (Fargate + its DB + its cache) bounded to a set
+        number of realms. You scale by adding cells; a placement engine routes each tenant to one.
+      </p>
+      <div class="bg-white rounded-xl shadow-lg p-8">
+        <CellsArchitecture client:visible />
+      </div>
+    </div>
+  </section>
+
+  <!-- Multi-cloud -->
+  <section id="multi-cloud" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-4">Multi-Cloud, Done Honestly</h2>
+      <p class="text-lg text-gray-600 text-center max-w-3xl mx-auto mb-12">
+        Two premium options, depending on whether you need disaster recovery across clouds or
+        true active-active. Standard deployments stay single-cloud, multi-region.
+      </p>
+      <div class="bg-white rounded-xl shadow-lg p-8">
+        <MultiCloudStandby client:visible />
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <div class="border-2 border-primary-200 rounded-xl p-6">
+          <h3 class="text-lg font-bold mb-2">Option A — Cross-cloud warm standby</h3>
+          <p class="text-gray-600">Aurora (AWS) replicates to Azure Database for PostgreSQL via logical replication — physical log shipping isn't possible on Aurora. Active-passive with DNS failover; great for DR and data sovereignty.</p>
+        </div>
+        <div class="border-2 border-secondary-200 rounded-xl p-6">
+          <h3 class="text-lg font-bold mb-2">Option B — YugabyteDB active-active</h3>
+          <p class="text-gray-600">One distributed-SQL cluster spans clouds with no failover gap — the tier that credibly backs 99.99%. Trades that for gated DB migrations, cross-cloud egress cost, and heavier ops.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLA tiers -->
+  <section id="sla-tiers" class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-12">Availability, Tiered by Architecture</h2>
+      <div class="max-w-4xl mx-auto overflow-x-auto">
+        <table class="w-full bg-white rounded-xl shadow overflow-hidden text-left">
+          <thead class="bg-primary-600 text-white">
+            <tr>
+              <th class="px-6 py-4 font-semibold">Tier</th>
+              <th class="px-6 py-4 font-semibold">Architecture</th>
+              <th class="px-6 py-4 font-semibold">Target SLA</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr>
+              <td class="px-6 py-4 font-semibold">Single region</td>
+              <td class="px-6 py-4 text-gray-600">Aurora Multi-AZ</td>
+              <td class="px-6 py-4 font-bold text-primary-600">99.9%</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 font-semibold">Multi-region</td>
+              <td class="px-6 py-4 text-gray-600">Aurora Global active-passive + DNS failover</td>
+              <td class="px-6 py-4 font-bold text-primary-600">99.95%</td>
+            </tr>
+            <tr>
+              <td class="px-6 py-4 font-semibold">Active-active multi-cloud</td>
+              <td class="px-6 py-4 text-gray-600">YugabyteDB (no failover gap)</td>
+              <td class="px-6 py-4 font-bold text-primary-600">99.99%</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="text-sm text-gray-500 text-center mt-4">SLA tiers are backed after production maturity.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Default vs premium -->
+  <section id="default-vs-optin" class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-12">Standard vs. Premium Opt-In</h2>
+      <div class="max-w-4xl mx-auto overflow-x-auto">
+        <table class="w-full bg-white rounded-xl shadow overflow-hidden text-left">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-6 py-4 font-semibold">Standard (included)</th>
+              <th class="px-6 py-4 font-semibold">Premium (opt-in)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 text-gray-700">
+            <tr><td class="px-6 py-4">Single AWS region, Multi-AZ</td><td class="px-6 py-4">Multi-region active-passive DR (Aurora Global)</td></tr>
+            <tr><td class="px-6 py-4">Pooled cells, realm-per-tenant</td><td class="px-6 py-4">Dedicated silo (own Keycloak + DB)</td></tr>
+            <tr><td class="px-6 py-4">Aurora PostgreSQL</td><td class="px-6 py-4">Cross-cloud warm standby (AWS→Azure)</td></tr>
+            <tr><td class="px-6 py-4">99.9% target SLA</td><td class="px-6 py-4">YugabyteDB active-active (99.99% target)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="architecture-cta" class="py-16 bg-gradient-to-br from-primary-600 to-secondary-600 text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold mb-4">Want the full detail?</h2>
+      <p class="text-xl text-blue-100 mb-8">
+        Migration, rolling upgrades &amp; patching, HA &amp; resiliency, realm setup, analytics, and
+        security — all in the documentation.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/docs" data-track="architecture-cta-docs" class="bg-white text-primary-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition shadow-lg">
+          Browse the docs →
+        </a>
+        <a href="/trial" class="border-2 border-white text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-primary-600 transition">
+          Start free trial
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
