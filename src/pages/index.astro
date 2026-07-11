@@ -532,7 +532,7 @@ import ROICalculator from '../components/ROICalculator';
 
             <div class="bg-white rounded-xl p-8 shadow-lg inline-block mb-6">
               <div class="text-6xl font-bold text-primary-600 mb-2">$0.02</div>
-              <div class="text-xl text-gray-600">per Monthly Active User</div>
+              <div class="text-xl text-gray-600">per Monthly Active User<sup class="text-primary-600">*</sup></div>
               <div class="text-sm text-gray-500 mt-2">(billed annually: $0.24/MAU/year)</div>
             </div>
           </div>
@@ -656,6 +656,49 @@ import ROICalculator from '../components/ROICalculator';
         </div>
       </div>
 
+      <!-- Fair Use Footnote (applies to both tiered and flat pricing) -->
+      <p class="text-center text-sm text-gray-500 mt-10">
+        <span class="text-primary-600">*</span> All plans are subject to our
+        <button type="button" id="fair-use-link" class="text-primary-600 hover:text-primary-700 underline font-medium">
+          Fair Use &amp; MAU Policy
+        </button> — how we define a Monthly Active User, authentication fair-use limits, and machine-to-machine tokens.
+      </p>
+
+      <!-- Fair Use Policy Modal -->
+      <dialog id="fair-use-modal" class="rounded-2xl p-0 max-w-2xl w-[92%] shadow-2xl backdrop:bg-black/50">
+        <div class="p-8">
+          <div class="flex items-start justify-between mb-5">
+            <h3 class="text-2xl font-bold">Fair Use &amp; MAU Policy</h3>
+            <button type="button" id="fair-use-close" aria-label="Close policy" class="text-gray-400 hover:text-gray-700 text-3xl leading-none -mt-2">&times;</button>
+          </div>
+          <div class="space-y-5 text-sm text-gray-700 leading-relaxed max-h-[70vh] overflow-y-auto pr-2">
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">1. What counts as a Monthly Active User (MAU)</h4>
+              <p>An MAU is a <strong>unique end user who authenticates at least once during a calendar month</strong>. A user is counted only once per month no matter how many times they sign in. Token refreshes, session introspections, and background token validations do <strong>not</strong> create additional MAUs.</p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">2. Authentication fair-use limit</h4>
+              <p>Plans assume typical interactive usage of up to <strong>~30 authentications per MAU per month</strong> (a normal app averages well under 10). Sustained usage above this may be subject to overage of <strong>$0.002 per additional authentication</strong>. We will always notify you before any overage applies — there are no surprise charges.</p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">3. Machine-to-machine (M2M) tokens</h4>
+              <p>Automated, service-to-service token issuance (OAuth <em>client-credentials</em> and similar non-human traffic) is <strong>billed separately</strong> from MAU, since it doesn't map to a human user. Talk to us for M2M / API token pricing tailored to your volume.</p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">4. Abuse &amp; automated traffic</h4>
+              <p>Credential-stuffing, bot, scraping, or otherwise abusive authentication traffic may be rate-limited and is excluded from fair-use allowances. Our AI-powered monitoring flags anomalous patterns and protects your tenant automatically.</p>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">5. Questions</h4>
+              <p>Have an unusual usage pattern or a high-volume M2M workload? <a href="#contact" id="fair-use-contact" class="text-primary-600 hover:text-primary-700 underline">Contact our team</a> and we'll design a plan that fits.</p>
+            </div>
+          </div>
+          <div class="mt-6 text-right">
+            <button type="button" id="fair-use-ok" class="bg-primary-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-primary-700 transition">Got it</button>
+          </div>
+        </div>
+      </dialog>
+
       <!-- Pricing Toggle Script -->
       <script>
         const tieredBtn = document.getElementById('tiered-btn');
@@ -679,6 +722,19 @@ import ROICalculator from '../components/ROICalculator';
           flatBtn.classList.remove('bg-gray-200', 'text-gray-700');
           tieredBtn?.classList.remove('bg-primary-600', 'text-white');
           tieredBtn?.classList.add('bg-gray-200', 'text-gray-700');
+        });
+
+        // Fair Use Policy modal
+        const fairUseModal = document.getElementById('fair-use-modal');
+        const openFairUse = () => fairUseModal?.showModal();
+        const closeFairUse = () => fairUseModal?.close();
+        document.getElementById('fair-use-link')?.addEventListener('click', openFairUse);
+        document.getElementById('fair-use-close')?.addEventListener('click', closeFairUse);
+        document.getElementById('fair-use-ok')?.addEventListener('click', closeFairUse);
+        document.getElementById('fair-use-contact')?.addEventListener('click', closeFairUse);
+        // Close when clicking the backdrop (outside the dialog content)
+        fairUseModal?.addEventListener('click', (e) => {
+          if (e.target === fairUseModal) closeFairUse();
         });
       </script>
     </div>
