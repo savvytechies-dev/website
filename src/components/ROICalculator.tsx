@@ -188,7 +188,7 @@ export default function ROICalculator() {
                 <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/>
                 </svg>
-                <span>99.99% SLA (vs 99.9%)</span>
+                <span>Tiered SLA up to 99.99%</span>
               </div>
               <div className="flex items-center">
                 <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -200,7 +200,7 @@ export default function ROICalculator() {
                 <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/>
                 </svg>
-                <span>True Multi-Cloud</span>
+                <span>Multi-cloud standby (optional)</span>
               </div>
               <div className="flex items-center">
                 <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,7 +212,7 @@ export default function ROICalculator() {
                 <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/>
                 </svg>
-                <span>&lt;60s Recovery Time</span>
+                <span>Automated failover &amp; backups</span>
               </div>
               <div className="flex items-center">
                 <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
