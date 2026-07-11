@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.claude/
+*.log
+.DS_Store
+
+# Keep internal planning / strategy / marketing docs LOCAL only.
+# Publish just the site code + README.
+/*.md
+!/README.md

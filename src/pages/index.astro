@@ -1,0 +1,806 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import ROICalculator from '../components/ROICalculator';
+---
+
+<Layout title="SavvyTechies - Enterprise Multi-Cloud Managed Services">
+  <Navigation />
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-primary-600 to-secondary-600 text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <div class="inline-block bg-blue-500 bg-opacity-30 rounded-full px-4 py-2 mb-6">
+          <span class="text-sm font-semibold">🎉 NEW: AI-Powered Configuration + Enterprise Analytics</span>
+        </div>
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">
+          The Intelligent Identity Platform
+        </h1>
+        <p class="text-xl md:text-2xl mb-4 text-blue-100">
+          Managed Keycloak with Built-in Analytics and AI
+        </p>
+        <p class="text-lg mb-8 text-blue-200">
+          Cut auth costs by 60% vs Auth0. Get Auth0-level insights. Configure in plain English.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/trial" class="bg-white text-primary-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition shadow-lg">
+            Start Free Trial
+          </a>
+          <a href="#contact" class="border-2 border-white text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-primary-600 transition">
+            See Demo
+          </a>
+        </div>
+        <p class="text-sm text-blue-100 mt-4">
+          No credit card required • Multi-cloud HA • Zero vendor lock-in
+        </p>
+      </div>
+
+      <!-- Key Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mt-16">
+        <div class="text-center">
+          <div class="text-4xl font-bold mb-2">60%</div>
+          <div class="text-blue-100">Cost Savings vs Auth0</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl font-bold mb-2">30 sec</div>
+          <div class="text-blue-100">AI Setup Time</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl font-bold mb-2">99.9%</div>
+          <div class="text-blue-100">Uptime SLA</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl font-bold mb-2">3 Clouds</div>
+          <div class="text-blue-100">AWS, Azure, GCP</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value Proposition Section (NEW) -->
+  <section class="py-16 bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center p-6">
+          <div class="text-4xl mb-4">📊</div>
+          <h3 class="text-xl font-bold mb-3">Enterprise Analytics</h3>
+          <p class="text-gray-600">
+            One-click SOC 2 reports, security anomaly detection, and compliance dashboards. Auth0 charges $20K+/year extra for this—we include it.
+          </p>
+        </div>
+        <div class="text-center p-6">
+          <div class="text-4xl mb-4">🤖</div>
+          <h3 class="text-xl font-bold mb-3">AI Configuration</h3>
+          <p class="text-gray-600">
+            "Set up Google SSO" → done in 30 seconds. No Keycloak expertise needed. Configure complex auth flows in plain English.
+          </p>
+        </div>
+        <div class="text-center p-6">
+          <div class="text-4xl mb-4">☁️</div>
+          <h3 class="text-xl font-bold mb-3">Multi-Cloud HA</h3>
+          <p class="text-gray-600">
+            True redundancy across AWS, Azure, and GCP. Zero vendor lock-in. Automatic failover in under 90 seconds.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4">Our Managed Services</h2>
+        <p class="text-xl text-gray-600">Fully managed, highly available, and secure infrastructure</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Keycloak Service (Featured) -->
+        <div class="bg-gradient-to-br from-primary-50 to-secondary-50 rounded-xl p-8 hover:shadow-xl transition border-2 border-primary-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="text-4xl">🔐</div>
+            <span class="bg-secondary-600 text-white text-xs font-bold px-3 py-1 rounded-full">FEATURED</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-4">Managed Keycloak</h3>
+          <p class="text-gray-600 mb-6">
+            The only managed Keycloak with built-in analytics and AI. 60% cheaper than Auth0 with zero vendor lock-in.
+          </p>
+          <ul class="space-y-3 mb-6">
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span><strong>AI Configuration</strong> (plain English)</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span><strong>Enterprise Analytics</strong> (SOC 2 reports)</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>SSO, MFA, RBAC, Multi-tenancy</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Multi-cloud HA (AWS/Azure/GCP)</span>
+            </li>
+          </ul>
+          <a href="/keycloak" class="text-primary-600 font-semibold hover:text-primary-700">
+            Learn More →
+          </a>
+        </div>
+
+        <!-- RabbitMQ Service -->
+        <div class="bg-gray-50 rounded-xl p-8 hover:shadow-xl transition">
+          <div class="text-4xl mb-4">🐰</div>
+          <h3 class="text-2xl font-bold mb-4">Managed RabbitMQ</h3>
+          <p class="text-gray-600 mb-6">
+            Reliable message queuing with automatic clustering, monitoring, and scaling across clouds.
+          </p>
+          <ul class="space-y-3 mb-6">
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>High Availability Clustering</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Auto-scaling</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Real-time Monitoring</span>
+            </li>
+          </ul>
+          <a href="/rabbitmq" class="text-primary-600 font-semibold hover:text-primary-700">
+            Learn More →
+          </a>
+        </div>
+
+        <!-- Kafka Service -->
+        <div class="bg-gray-50 rounded-xl p-8 hover:shadow-xl transition">
+          <div class="text-4xl mb-4">⚡</div>
+          <h3 class="text-2xl font-bold mb-4">Managed Kafka</h3>
+          <p class="text-gray-600 mb-6">
+            High-throughput event streaming platform for real-time data pipelines and streaming analytics.
+          </p>
+          <ul class="space-y-3 mb-6">
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Multi-Region Replication</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Exactly-Once Semantics</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Schema Registry</span>
+            </li>
+          </ul>
+          <a href="/kafka" class="text-primary-600 font-semibold hover:text-primary-700">
+            Learn More →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us Section -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4">Why SavvyTechies?</h2>
+        <p class="text-xl text-gray-600">The intelligent identity platform that combines Keycloak, Analytics, and AI</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="text-center bg-white p-6 rounded-xl shadow-sm">
+          <div class="bg-primary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <svg class="h-8 w-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Built-in Analytics</h3>
+          <p class="text-gray-600">Auth0-level insights included. One-click SOC 2 reports save 40 hours per audit.</p>
+        </div>
+
+        <div class="text-center bg-white p-6 rounded-xl shadow-sm">
+          <div class="bg-primary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <svg class="h-8 w-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">AI Configuration</h3>
+          <p class="text-gray-600">Set up SSO in 30 seconds, not 8 hours. No Keycloak expertise required.</p>
+        </div>
+
+        <div class="text-center bg-white p-6 rounded-xl shadow-sm">
+          <div class="bg-primary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <svg class="h-8 w-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">60% Cost Savings</h3>
+          <p class="text-gray-600">$45K/year vs $120K+ for Auth0. Same features, better analytics, less cost.</p>
+        </div>
+
+        <div class="text-center bg-white p-6 rounded-xl shadow-sm">
+          <div class="bg-primary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <svg class="h-8 w-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Zero Vendor Lock-In</h3>
+          <p class="text-gray-600">Multi-cloud HA across AWS, Azure, GCP. 100% open-source Keycloak core.</p>
+        </div>
+
+        <div class="text-center bg-white p-6 rounded-xl shadow-sm">
+          <div class="bg-primary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <svg class="h-8 w-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Security & Compliance</h3>
+          <p class="text-gray-600">SOC 2-ready infrastructure. Anomaly detection. Security transparency dashboards.</p>
+        </div>
+
+        <div class="text-center bg-white p-6 rounded-xl shadow-sm">
+          <div class="bg-primary-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+            <svg class="h-8 w-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold mb-2">99.9% Uptime SLA</h3>
+          <p class="text-gray-600">Automatic failover in 90 seconds. AI-powered monitoring. 24/7 support.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section id="pricing" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
+        <p class="text-xl text-gray-600 mb-6">Choose the plan that fits your needs</p>
+
+        <!-- Pricing Toggle -->
+        <div class="flex justify-center items-center gap-4 mb-6">
+          <button id="tiered-btn" class="px-6 py-3 rounded-lg font-semibold bg-primary-600 text-white transition">
+            Tiered Plans
+          </button>
+          <button id="flat-btn" class="px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-700 hover:bg-gray-300 transition">
+            Pay-Per-User
+          </button>
+        </div>
+
+        <div class="mt-4 inline-block bg-secondary-50 border-2 border-secondary-600 rounded-lg px-6 py-3">
+          <p class="text-secondary-900 font-semibold">
+            🎉 Try any plan free for 7 days • <a href="/trial" class="text-secondary-600 hover:text-secondary-700 underline">Start your trial →</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Tiered Pricing -->
+      <div id="tiered-pricing" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        <!-- Starter Tier -->
+        <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-primary-500 transition">
+          <h3 class="text-xl font-bold mb-2">Starter</h3>
+          <div class="text-3xl font-bold mb-2">$8K<span class="text-sm text-gray-500">/year</span></div>
+          <p class="text-sm text-gray-600 mb-4">$667/month</p>
+          <p class="text-gray-600 mb-4 text-sm">Startups & POC</p>
+          <ul class="space-y-2 mb-6 text-sm">
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Up to 100 MAU</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span><strong>Essential Analytics</strong></span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span><strong>AI Assistant</strong> (100 requests/mo)</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>SSO, MFA, Multi-tenancy</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Multi-cloud (US regions)</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>99.9% SLA • Email Support</span>
+            </li>
+          </ul>
+          <div class="space-y-2">
+            <a href="/trial" class="block text-center bg-secondary-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-secondary-700 transition text-sm">
+              Start Free Trial
+            </a>
+            <a href="#contact" class="block text-center bg-gray-100 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition text-sm">
+              Contact Sales
+            </a>
+          </div>
+        </div>
+
+        <!-- Professional Tier (Highlighted) -->
+        <div class="border-4 border-primary-500 rounded-xl p-6 relative shadow-xl">
+          <div class="absolute top-0 right-0 bg-primary-500 text-white px-3 py-1 rounded-bl-lg rounded-tr-lg text-xs font-semibold">
+            MOST POPULAR
+          </div>
+          <h3 class="text-xl font-bold mb-2">Professional</h3>
+          <div class="text-3xl font-bold mb-2">$45K<span class="text-sm text-gray-500">/year</span></div>
+          <p class="text-sm text-gray-600 mb-4">$3,750/month</p>
+          <p class="text-gray-600 mb-4 text-sm">Growing B2B SaaS</p>
+          <ul class="space-y-2 mb-6 text-sm">
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Up to 1,000 MAU</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span><strong>Advanced Analytics</strong> (compliance)</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span><strong>AI Assistant</strong> (unlimited)</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Custom dashboards</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Multi-cloud HA</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>99.9% SLA • Slack Support</span>
+            </li>
+          </ul>
+          <div class="space-y-2">
+            <a href="/trial" class="block text-center bg-secondary-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-secondary-700 transition text-sm">
+              Start Free Trial
+            </a>
+            <a href="#contact" class="block text-center bg-primary-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-700 transition text-sm">
+              Contact Sales
+            </a>
+          </div>
+        </div>
+
+        <!-- Enterprise Tier -->
+        <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-primary-500 transition">
+          <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+          <div class="text-3xl font-bold mb-2">$130K<span class="text-sm text-gray-500">/year</span></div>
+          <p class="text-sm text-gray-600 mb-4">$10,833/month</p>
+          <p class="text-gray-600 mb-4 text-sm">Mid-Market</p>
+          <ul class="space-y-2 mb-6 text-sm">
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Up to 5,000 MAU</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span><strong>Enterprise Analytics</strong> (ML/SIEM)</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span><strong>AI Proactive Recommendations</strong></span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Auto-remediation</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>BI exports (Snowflake, BigQuery)</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>99.9% SLA • 24/7 Support (1hr)</span>
+            </li>
+          </ul>
+          <div class="space-y-2">
+            <a href="/trial" class="block text-center bg-secondary-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-secondary-700 transition text-sm">
+              Start Free Trial
+            </a>
+            <a href="#contact" class="block text-center bg-gray-100 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition text-sm">
+              Contact Sales
+            </a>
+          </div>
+        </div>
+
+        <!-- Enterprise Plus Tier -->
+        <div class="border-2 border-gray-200 rounded-xl p-6 hover:border-primary-500 transition">
+          <h3 class="text-xl font-bold mb-2">Enterprise Plus</h3>
+          <div class="text-3xl font-bold mb-2">$280K+<span class="text-sm text-gray-500">/year</span></div>
+          <p class="text-sm text-gray-600 mb-4">Custom pricing</p>
+          <p class="text-gray-600 mb-4 text-sm">Fortune 1000</p>
+          <ul class="space-y-2 mb-6 text-sm">
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>5,000-25,000 MAU</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span><strong>Custom AI Model Fine-tuning</strong></span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Dedicated infrastructure</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>White-glove migration</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Quarterly business reviews</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>99.95% SLA • Dedicated team</span>
+            </li>
+          </ul>
+          <div class="space-y-2">
+            <a href="/trial" class="block text-center bg-secondary-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-secondary-700 transition text-sm">
+              Start Free Trial
+            </a>
+            <a href="#contact" class="block text-center bg-gray-100 text-gray-900 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition text-sm">
+              Contact Sales
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flat Pricing (Pay-Per-User) -->
+      <div id="flat-pricing" class="hidden max-w-4xl mx-auto">
+        <div class="bg-gradient-to-br from-primary-50 to-secondary-50 rounded-2xl p-8 md:p-12 border-2 border-primary-200">
+          <div class="text-center mb-8">
+            <h3 class="text-3xl font-bold mb-4">Ultra-Simple Pay-Per-User Pricing</h3>
+            <p class="text-xl text-gray-600 mb-6">No tiers. No volume discounts. Just simple.</p>
+
+            <div class="bg-white rounded-xl p-8 shadow-lg inline-block mb-6">
+              <div class="text-6xl font-bold text-primary-600 mb-2">$0.05</div>
+              <div class="text-xl text-gray-600">per Monthly Active User</div>
+              <div class="text-sm text-gray-500 mt-2">(billed annually: $0.60/MAU/year)</div>
+            </div>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <div>
+              <h4 class="text-xl font-bold mb-4">What's Included</h4>
+              <ul class="space-y-3">
+                <li class="flex items-start">
+                  <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span><strong>All features included</strong> - No feature gating</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>Unlimited SSO connections</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>Advanced MFA & security</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>True multi-cloud deployment</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>AI-powered monitoring</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>99.99% SLA</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  <span>24/7 Support</span>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 class="text-xl font-bold mb-4">Pricing Examples</h4>
+              <div class="space-y-4">
+                <div class="bg-white rounded-lg p-4 shadow">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">10,000 MAU</span>
+                    <span class="text-primary-600 font-bold">$500/mo</span>
+                  </div>
+                  <div class="text-sm text-gray-500">$6,000/year</div>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">50,000 MAU</span>
+                    <span class="text-primary-600 font-bold">$2,500/mo</span>
+                  </div>
+                  <div class="text-sm text-gray-500">$30,000/year</div>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">100,000 MAU</span>
+                    <span class="text-primary-600 font-bold">$5,000/mo</span>
+                  </div>
+                  <div class="text-sm text-gray-500">$60,000/year</div>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">500,000 MAU</span>
+                    <span class="text-primary-600 font-bold">$25,000/mo</span>
+                  </div>
+                  <div class="text-sm text-gray-500">$300,000/year</div>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">1,000,000 MAU</span>
+                    <span class="text-primary-600 font-bold">$50,000/mo</span>
+                  </div>
+                  <div class="text-sm text-gray-500">$600,000/year</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6 mb-8">
+            <div class="flex items-start">
+              <svg class="h-6 w-6 text-yellow-600 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <div>
+                <p class="font-semibold text-yellow-900 mb-1">Perfect for predictable, linear growth</p>
+                <p class="text-yellow-800 text-sm">Pay exactly for what you use. Scale up or down anytime. No surprises.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center space-y-4">
+            <a href="/trial" class="inline-block bg-secondary-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-secondary-700 transition shadow-lg">
+              Start Free 7-Day Trial
+            </a>
+            <div class="text-sm text-gray-600">
+              No credit card required • Cancel anytime
+            </div>
+            <div class="mt-4">
+              <a href="#contact" class="text-primary-600 hover:text-primary-700 font-semibold">
+                Have questions? Contact our team →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing Toggle Script -->
+      <script>
+        const tieredBtn = document.getElementById('tiered-btn');
+        const flatBtn = document.getElementById('flat-btn');
+        const tieredPricing = document.getElementById('tiered-pricing');
+        const flatPricing = document.getElementById('flat-pricing');
+
+        tieredBtn?.addEventListener('click', () => {
+          tieredPricing?.classList.remove('hidden');
+          flatPricing?.classList.add('hidden');
+          tieredBtn.classList.add('bg-primary-600', 'text-white');
+          tieredBtn.classList.remove('bg-gray-200', 'text-gray-700');
+          flatBtn?.classList.remove('bg-primary-600', 'text-white');
+          flatBtn?.classList.add('bg-gray-200', 'text-gray-700');
+        });
+
+        flatBtn?.addEventListener('click', () => {
+          flatPricing?.classList.remove('hidden');
+          tieredPricing?.classList.add('hidden');
+          flatBtn.classList.add('bg-primary-600', 'text-white');
+          flatBtn.classList.remove('bg-gray-200', 'text-gray-700');
+          tieredBtn?.classList.remove('bg-primary-600', 'text-white');
+          tieredBtn?.classList.add('bg-gray-200', 'text-gray-700');
+        });
+      </script>
+    </div>
+  </section>
+
+  <!-- ROI Calculator Section -->
+  <section id="calculator" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4">Calculate Your Savings</h2>
+        <p class="text-xl text-gray-600">See how much you can save vs. DIY or other providers</p>
+      </div>
+      <ROICalculator client:load />
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">Get Started Today</h2>
+        <p class="text-xl text-gray-600">Schedule a demo or talk to our solutions team</p>
+      </div>
+
+      <form id="contact-form" class="space-y-6">
+        <div id="form-message" class="hidden p-4 rounded-lg mb-4"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+            <input type="text" id="name" name="name" required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+            <input type="email" id="email" name="email" required
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+          </div>
+        </div>
+
+        <div>
+          <label for="company" class="block text-sm font-medium text-gray-700 mb-2">Company</label>
+          <input type="text" id="company" name="company"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+        </div>
+
+        <div>
+          <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone (optional)</label>
+          <input type="tel" id="phone" name="phone"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+        </div>
+
+        <div>
+          <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+          <textarea id="message" name="message" rows="4" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"></textarea>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" id="submit-btn"
+            class="bg-primary-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-primary-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+            Request Demo
+          </button>
+        </div>
+      </form>
+
+      <script>
+        const form = document.getElementById('contact-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const formMessage = document.getElementById('form-message');
+
+        form?.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          // Disable submit button
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Sending...';
+
+          // Get form data
+          const formData = new FormData(form);
+          const data = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            company: formData.get('company'),
+            phone: formData.get('phone'),
+            message: formData.get('message')
+          };
+
+          try {
+            const response = await fetch('https://0br071yj0d.execute-api.us-east-1.amazonaws.com', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+              // Show success message
+              formMessage.textContent = 'Thank you! Your message has been sent successfully. We\'ll get back to you soon.';
+              formMessage.className = 'p-4 rounded-lg mb-4 bg-green-100 text-green-800';
+              formMessage.classList.remove('hidden');
+
+              // Reset form
+              form.reset();
+            } else {
+              throw new Error('Failed to send message');
+            }
+          } catch (error) {
+            // Show error message
+            formMessage.textContent = 'Sorry, there was an error sending your message. Please try again or email us directly at govind.prathi@savvytechies.com';
+            formMessage.className = 'p-4 rounded-lg mb-4 bg-red-100 text-red-800';
+            formMessage.classList.remove('hidden');
+          } finally {
+            // Re-enable submit button
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Request Demo';
+          }
+        });
+      </script>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>

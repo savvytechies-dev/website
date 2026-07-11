@@ -1,0 +1,456 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+// In production, fetch this data from your monitoring API (Grafana, Prometheus, etc.)
+// For now, we'll use static data as a template
+const currentStatus = {
+  overall: 'operational', // 'operational' | 'degraded' | 'outage'
+  lastUpdated: new Date().toISOString(),
+  services: [
+    { name: 'Keycloak Authentication API', status: 'operational', region: 'Multi-Cloud' },
+    { name: 'Admin Dashboard', status: 'operational', region: 'Multi-Cloud' },
+    { name: 'Database (YugabyteDB)', status: 'operational', region: 'Multi-Cloud' },
+    { name: 'Monitoring & Alerts', status: 'operational', region: 'Multi-Cloud' },
+  ],
+  regions: [
+    { name: 'AWS (us-east-1)', status: 'healthy', latency: '45ms' },
+    { name: 'Azure (East US)', status: 'healthy', latency: '48ms' },
+    { name: 'GCP (us-central1)', status: 'healthy', latency: '52ms' },
+  ]
+};
+
+const uptimeStats = {
+  current90Days: 99.94,
+  targetSLA: 99.9,
+  totalMinutes: 129600,
+  downtimeMinutes: 26,
+  monthly: [
+    { month: 'October 2025', uptime: 99.96, downtime: '17 min' },
+    { month: 'September 2025', uptime: 99.92, downtime: '52 min' },
+    { month: 'August 2025', uptime: 100.00, downtime: '0 min' },
+  ]
+};
+
+const recentIncidents = [
+  {
+    date: '2025-10-15',
+    time: '14:32 UTC',
+    title: 'AWS us-east-1 Network Latency',
+    status: 'resolved',
+    duration: '12 minutes',
+    impact: 'Slow login responses (avg +2s latency)',
+    resolution: 'Automatic failover to Azure/GCP',
+    rootCause: 'AWS network congestion in us-east-1 region'
+  },
+  {
+    date: '2025-10-03',
+    time: '09:15 UTC',
+    title: 'Database Replication Lag',
+    status: 'resolved',
+    duration: '8 minutes',
+    impact: 'Minor - Read queries delayed ~500ms',
+    resolution: 'Replication resync completed automatically',
+    rootCause: 'Temporary cross-cloud VPN instability'
+  },
+  {
+    date: '2025-09-22',
+    time: '18:45 UTC',
+    title: 'Scheduled Maintenance - Keycloak Upgrade',
+    status: 'completed',
+    duration: '15 minutes',
+    impact: 'None (rolling update, zero downtime)',
+    resolution: 'Keycloak upgraded to v23.0.1'
+  }
+];
+
+const securityMetrics = {
+  incidents12Months: 0,
+  dataBreaches: 0,
+  blockedThreats: 47,
+  lastSecurityReview: '2025-10-28',
+  nextPenetrationTest: 'Q2 2025',
+  recentEvents: [
+    { date: 'Oct 29', event: '12 brute-force login attempts blocked', status: 'blocked' },
+    { date: 'Oct 21', event: '3 SQL injection attempts blocked (WAF)', status: 'blocked' },
+    { date: 'Oct 15', event: '1 DDoS attempt mitigated (AWS Shield)', status: 'mitigated' },
+    { date: 'Oct 8', event: 'Vulnerability CVE-2024-XXXX patched', status: 'patched' }
+  ]
+};
+
+// Helper function to get status color
+function getStatusColor(status: string) {
+  switch(status) {
+    case 'operational':
+    case 'healthy':
+    case 'resolved':
+    case 'completed':
+      return 'bg-green-100 text-green-800';
+    case 'degraded':
+      return 'bg-yellow-100 text-yellow-800';
+    case 'outage':
+      return 'bg-red-100 text-red-800';
+    default:
+      return 'bg-gray-100 text-gray-800';
+  }
+}
+
+function getStatusIcon(status: string) {
+  switch(status) {
+    case 'operational':
+    case 'healthy':
+      return '✅';
+    case 'degraded':
+      return '⚠️';
+    case 'outage':
+      return '🔴';
+    default:
+      return '⚪';
+  }
+}
+---
+
+<Layout title="System Status - SavvyTechies">
+  <Navigation />
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-primary-600 to-secondary-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          System Status
+        </h1>
+        <p class="text-xl text-blue-100">
+          Real-time status and incident history for SavvyTechies managed services
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Current Status -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Overall Status -->
+      <div class="mb-12">
+        <div class={`text-center p-8 rounded-xl ${currentStatus.overall === 'operational' ? 'bg-green-50 border-2 border-green-200' : 'bg-red-50 border-2 border-red-200'}`}>
+          <div class="text-5xl mb-4">
+            {currentStatus.overall === 'operational' ? '✅' : '🔴'}
+          </div>
+          <h2 class="text-3xl font-bold mb-2">
+            {currentStatus.overall === 'operational' ? 'All Systems Operational' : 'System Disruption'}
+          </h2>
+          <p class="text-gray-600">
+            Last updated: {new Date(currentStatus.lastUpdated).toLocaleString('en-US', {
+              timeZone: 'UTC',
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            })} UTC
+          </p>
+        </div>
+      </div>
+
+      <!-- Services Status -->
+      <div class="mb-12">
+        <h3 class="text-2xl font-bold mb-6">Services</h3>
+        <div class="space-y-4">
+          {currentStatus.services.map(service => (
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+              <div class="flex items-center space-x-4">
+                <span class="text-2xl">{getStatusIcon(service.status)}</span>
+                <div>
+                  <div class="font-semibold">{service.name}</div>
+                  <div class="text-sm text-gray-500">{service.region}</div>
+                </div>
+              </div>
+              <span class={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(service.status)}`}>
+                {service.status.charAt(0).toUpperCase() + service.status.slice(1)}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Regional Status -->
+      <div class="mb-12">
+        <h3 class="text-2xl font-bold mb-6">Regional Status</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {currentStatus.regions.map(region => (
+            <div class="p-6 bg-gray-50 rounded-lg">
+              <div class="flex items-center justify-between mb-3">
+                <span class="font-semibold">{region.name}</span>
+                <span class="text-2xl">{getStatusIcon(region.status)}</span>
+              </div>
+              <div class="text-sm text-gray-600">
+                <div>Status: <span class="font-semibold text-green-600">{region.status}</span></div>
+                <div>Latency: <span class="font-semibold">{region.latency}</span></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Uptime Statistics -->
+  <section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold mb-6">Uptime Statistics</h3>
+
+      <!-- 90 Day Uptime -->
+      <div class="bg-white rounded-xl p-8 mb-6 shadow-lg">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="text-4xl font-bold text-primary-600 mb-2">
+              {uptimeStats.current90Days}%
+            </div>
+            <div class="text-gray-600">90-Day Uptime</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-green-600 mb-2">
+              {uptimeStats.targetSLA}%
+            </div>
+            <div class="text-gray-600">Target SLA</div>
+          </div>
+          <div class="text-center">
+            <div class="text-4xl font-bold text-gray-600 mb-2">
+              {uptimeStats.downtimeMinutes} min
+            </div>
+            <div class="text-gray-600">Total Downtime</div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-6 border-t border-gray-200">
+          <div class="flex items-center justify-center">
+            <span class={`px-4 py-2 rounded-full text-sm font-semibold ${uptimeStats.current90Days >= uptimeStats.targetSLA ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+              {uptimeStats.current90Days >= uptimeStats.targetSLA ? '✅ Exceeding SLA' : '❌ Below SLA'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Breakdown -->
+      <div class="bg-white rounded-xl p-8 shadow-lg">
+        <h4 class="text-xl font-bold mb-4">Monthly Breakdown</h4>
+        <div class="space-y-4">
+          {uptimeStats.monthly.map(month => (
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div class="font-semibold">{month.month}</div>
+              <div class="flex items-center space-x-6">
+                <div class="text-right">
+                  <div class="font-bold text-lg">{month.uptime}%</div>
+                  <div class="text-sm text-gray-500">{month.downtime} downtime</div>
+                </div>
+                <div class="w-24 bg-gray-200 rounded-full h-3">
+                  <div
+                    class="bg-green-500 h-3 rounded-full"
+                    style={`width: ${month.uptime}%`}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Incidents -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h3 class="text-2xl font-bold mb-6">Recent Incidents</h3>
+
+      {recentIncidents.length === 0 ? (
+        <div class="text-center p-12 bg-green-50 rounded-xl">
+          <div class="text-5xl mb-4">🎉</div>
+          <h4 class="text-xl font-semibold mb-2">No Recent Incidents</h4>
+          <p class="text-gray-600">All systems have been running smoothly!</p>
+        </div>
+      ) : (
+        <div class="space-y-6">
+          {recentIncidents.map(incident => (
+            <div class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                  <span class={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(incident.status)}`}>
+                    {incident.status === 'resolved' ? '✅ Resolved' : incident.status === 'completed' ? '✅ Completed' : incident.status}
+                  </span>
+                  <div class="text-sm text-gray-500">
+                    {incident.date} | {incident.time}
+                  </div>
+                </div>
+              </div>
+
+              <h4 class="text-lg font-bold mb-3">{incident.title}</h4>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span class="font-semibold text-gray-700">Duration:</span> {incident.duration}
+                </div>
+                <div>
+                  <span class="font-semibold text-gray-700">Impact:</span> {incident.impact}
+                </div>
+                <div class="md:col-span-2">
+                  <span class="font-semibold text-gray-700">Resolution:</span> {incident.resolution}
+                </div>
+                {incident.rootCause && (
+                  <div class="md:col-span-2">
+                    <span class="font-semibold text-gray-700">Root Cause:</span> {incident.rootCause}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- Security Transparency -->
+  <section class="py-12 bg-gradient-to-br from-primary-50 to-secondary-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h3 class="text-2xl font-bold mb-2">Security Transparency</h3>
+        <p class="text-gray-600">We believe in full transparency about our security posture</p>
+      </div>
+
+      <!-- Security Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl p-6 text-center shadow-lg">
+          <div class="text-4xl font-bold text-green-600 mb-2">{securityMetrics.incidents12Months}</div>
+          <div class="text-sm text-gray-600">Security Incidents<br/>(Last 12 Months)</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 text-center shadow-lg">
+          <div class="text-4xl font-bold text-green-600 mb-2">{securityMetrics.dataBreaches}</div>
+          <div class="text-sm text-gray-600">Data Breaches<br/>(All Time)</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 text-center shadow-lg">
+          <div class="text-4xl font-bold text-primary-600 mb-2">{securityMetrics.blockedThreats}</div>
+          <div class="text-sm text-gray-600">Blocked Threats<br/>(Last 30 Days)</div>
+        </div>
+        <div class="bg-white rounded-xl p-6 text-center shadow-lg">
+          <div class="text-sm font-semibold text-gray-700 mb-2">Next Pentest</div>
+          <div class="text-2xl font-bold text-primary-600">{securityMetrics.nextPenetrationTest}</div>
+        </div>
+      </div>
+
+      <!-- Recent Security Events -->
+      <div class="bg-white rounded-xl p-8 shadow-lg">
+        <h4 class="text-xl font-bold mb-4">Recent Security Events (Automatically Mitigated)</h4>
+        <div class="space-y-3">
+          {securityMetrics.recentEvents.map(event => (
+            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div class="flex items-center space-x-3">
+                <span class="text-green-500 font-bold">✅</span>
+                <div>
+                  <span class="font-semibold text-sm">{event.date}:</span> {event.event}
+                </div>
+              </div>
+              <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                {event.status}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Subscribe Section -->
+  <section class="py-12 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h3 class="text-2xl font-bold mb-4">Get Status Updates</h3>
+      <p class="text-gray-600 mb-8">
+        Subscribe to receive notifications when incidents occur or when we perform scheduled maintenance.
+      </p>
+
+      <div class="bg-gray-50 rounded-xl p-8">
+        <form class="space-y-4">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <input
+              type="email"
+              placeholder="your.email@company.com"
+              class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              required
+            />
+            <button
+              type="submit"
+              class="bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition"
+            >
+              Subscribe
+            </button>
+          </div>
+          <p class="text-xs text-gray-500">
+            We'll only email you about system status updates. Unsubscribe anytime.
+          </p>
+        </form>
+
+        <div class="mt-8 pt-8 border-t border-gray-200">
+          <p class="text-sm text-gray-600 mb-4">Also available:</p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <a href="#" class="inline-flex items-center px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-primary-500 transition">
+              <span class="mr-2">📱</span> SMS Alerts
+            </a>
+            <a href="#" class="inline-flex items-center px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-primary-500 transition">
+              <span class="mr-2">💬</span> Slack Integration
+            </a>
+            <a href="#" class="inline-flex items-center px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-primary-500 transition">
+              <span class="mr-2">🔔</span> RSS Feed
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Historical Data Note -->
+  <section class="py-8 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-sm text-gray-600">
+        📊 For detailed historical data and SLA reports, please contact
+        <a href="mailto:support@savvytechies.com" class="text-primary-600 hover:text-primary-700 font-semibold">
+          support@savvytechies.com
+        </a>
+      </p>
+      <p class="text-xs text-gray-500 mt-2">
+        All times displayed in UTC. Data refreshes every 5 minutes.
+      </p>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Add smooth transitions for status changes */
+  [class*="bg-green-"],
+  [class*="bg-red-"],
+  [class*="bg-yellow-"] {
+    transition: all 0.3s ease;
+  }
+</style>
+
+<script>
+  // Auto-refresh status every 5 minutes
+  // In production, this would fetch fresh data from your API
+  setInterval(() => {
+    console.log('Checking for status updates...');
+    // fetch('/api/status').then(res => res.json()).then(data => {
+    //   // Update page with new data
+    // });
+  }, 5 * 60 * 1000); // 5 minutes
+
+  // Handle subscription form
+  const subscribeForm = document.querySelector('form');
+  subscribeForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = (e.target as HTMLFormElement).querySelector('input[type="email"]')?.value;
+
+    // In production, send to your API
+    console.log('Subscribing email:', email);
+    alert('Thanks for subscribing! You\'ll receive status updates at ' + email);
+
+    // Reset form
+    (e.target as HTMLFormElement).reset();
+  });
+</script>

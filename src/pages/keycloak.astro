@@ -1,0 +1,312 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import KeycloakArchitecture from '../components/KeycloakArchitecture';
+---
+
+<Layout title="Managed Keycloak with YugabyteDB - SavvyTechies" description="Enterprise-grade managed Keycloak authentication service with YugabyteDB backend. 99.99% SLA, multi-cloud deployment, and AI-powered operations.">
+  <Navigation />
+
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-br from-primary-600 to-secondary-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <div class="text-6xl mb-4">🔐</div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          Managed Keycloak with YugabyteDB
+        </h1>
+        <p class="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto mb-8">
+          Enterprise authentication and authorization that scales globally with unmatched reliability
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a href="/trial" class="bg-white text-primary-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition shadow-lg">
+            Start Free 7-Day Trial
+          </a>
+          <a href="/#contact" class="bg-secondary-700 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-secondary-800 transition border-2 border-white">
+            Contact Sales
+          </a>
+        </div>
+        <p class="text-sm text-blue-100 mt-4">
+          No credit card required • Full access to all features • Cancel anytime
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Overview Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold mb-6">Why Managed Keycloak?</h2>
+          <p class="text-lg text-gray-700 mb-4">
+            Keycloak is a powerful open-source identity and access management solution. But running it at scale with high availability across multiple clouds requires significant expertise and operational overhead.
+          </p>
+          <p class="text-lg text-gray-700 mb-6">
+            SavvyTechies provides a fully managed Keycloak service with YugabyteDB as the backend, giving you enterprise-grade authentication without the operational complexity.
+          </p>
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <div>
+                <div class="font-semibold">Zero Operational Burden</div>
+                <div class="text-gray-600">We handle updates, scaling, backups, and monitoring</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <div>
+                <div class="font-semibold">Global Scale</div>
+                <div class="text-gray-600">YugabyteDB provides multi-region active-active replication</div>
+              </div>
+            </div>
+            <div class="flex items-start">
+              <svg class="h-6 w-6 text-green-500 mr-3 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <div>
+                <div class="font-semibold">True Multi-Cloud</div>
+                <div class="text-gray-600">Deploy across AWS, Azure, and GCP without vendor lock-in</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-8">
+          <h3 class="text-2xl font-bold mb-6">Key Features</h3>
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <span class="bg-primary-100 text-primary-600 rounded-full p-2 mr-3">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+              </span>
+              <span>OAuth 2.0 / OpenID Connect</span>
+            </div>
+            <div class="flex items-center">
+              <span class="bg-primary-100 text-primary-600 rounded-full p-2 mr-3">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+              </span>
+              <span>SAML 2.0 Support</span>
+            </div>
+            <div class="flex items-center">
+              <span class="bg-primary-100 text-primary-600 rounded-full p-2 mr-3">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+              </span>
+              <span>User Federation (LDAP/AD)</span>
+            </div>
+            <div class="flex items-center">
+              <span class="bg-primary-100 text-primary-600 rounded-full p-2 mr-3">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/>
+                </svg>
+              </span>
+              <span>Social Login (Google, GitHub, etc.)</span>
+            </div>
+            <div class="flex items-center">
+              <span class="bg-primary-100 text-primary-600 rounded-full p-2 mr-3">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+              </span>
+              <span>Multi-Factor Authentication</span>
+            </div>
+            <div class="flex items-center">
+              <span class="bg-primary-100 text-primary-600 rounded-full p-2 mr-3">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+                </svg>
+              </span>
+              <span>Custom Themes & Branding</span>
+            </div>
+            <div class="flex items-center">
+              <span class="bg-primary-100 text-primary-600 rounded-full p-2 mr-3">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                </svg>
+              </span>
+              <span>REST APIs & Admin Console</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-12">Architecture Overview</h2>
+
+      <div class="bg-white rounded-xl shadow-lg p-8">
+        <KeycloakArchitecture client:load />
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <div class="bg-white rounded-lg p-6 shadow">
+          <h3 class="text-lg font-bold mb-3">High Availability</h3>
+          <p class="text-gray-600">
+            Active-active deployment across multiple clouds ensures zero downtime during failures or maintenance.
+          </p>
+        </div>
+        <div class="bg-white rounded-lg p-6 shadow">
+          <h3 class="text-lg font-bold mb-3">Global Performance</h3>
+          <p class="text-gray-600">
+            GeoDNS routing directs users to the nearest region for optimal latency worldwide.
+          </p>
+        </div>
+        <div class="bg-white rounded-lg p-6 shadow">
+          <h3 class="text-lg font-bold mb-3">Data Sovereignty</h3>
+          <p class="text-gray-600">
+            Deploy in specific regions to meet compliance requirements for GDPR, HIPAA, and more.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center mb-12">Perfect For</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="border-2 border-gray-200 rounded-xl p-8 hover:border-primary-500 transition">
+          <h3 class="text-xl font-bold mb-4">🏢 Multi-Tenant B2B SaaS</h3>
+          <p class="text-gray-600 mb-4">
+            Isolate customer data while providing enterprise SSO, custom branding, and role-based access control for each tenant.
+          </p>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Realm-per-tenant isolation</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Custom authentication flows per customer</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Enterprise SSO integrations</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="border-2 border-gray-200 rounded-xl p-8 hover:border-primary-500 transition">
+          <h3 class="text-xl font-bold mb-4">🏥 Healthcare & FinTech</h3>
+          <p class="text-gray-600 mb-4">
+            Meet strict compliance requirements with audit logs, encryption, and data residency controls.
+          </p>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>HIPAA & SOC 2 compliant</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Regional data isolation</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Comprehensive audit trails</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="border-2 border-gray-200 rounded-xl p-8 hover:border-primary-500 transition">
+          <h3 class="text-xl font-bold mb-4">🌍 Global Consumer Apps</h3>
+          <p class="text-gray-600 mb-4">
+            Scale to millions of users with social login, passwordless authentication, and low-latency worldwide.
+          </p>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Social & passwordless auth</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Global CDN for login pages</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Automatic scaling</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="border-2 border-gray-200 rounded-xl p-8 hover:border-primary-500 transition">
+          <h3 class="text-xl font-bold mb-4">🏭 Enterprise Portals</h3>
+          <p class="text-gray-600 mb-4">
+            Unify authentication across multiple applications with SSO, strong MFA, and centralized user management.
+          </p>
+          <ul class="space-y-2 text-sm">
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Single pane of glass for identity</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>LDAP/AD integration</span>
+            </li>
+            <li class="flex items-center">
+              <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Advanced RBAC policies</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing CTA -->
+  <section class="py-16 bg-gradient-to-br from-primary-600 to-secondary-600 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+      <p class="text-xl text-blue-100 mb-8">
+        Start with Professional tier at $24K/year or contact us for Enterprise pricing
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="/#contact" class="bg-white text-primary-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">
+          Request Demo
+        </a>
+        <a href="/#pricing" class="border-2 border-white text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-primary-600 transition">
+          View Pricing
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
