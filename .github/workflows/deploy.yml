@@ -1,0 +1,80 @@
+name: Deploy website (S3 + CloudFront)
+
+# Builds the Astro site and deploys to S3, then invalidates CloudFront.
+# Auth uses GitHub OIDC -> assume an AWS IAM role (no long-lived AWS keys).
+#
+# Required GitHub config (Settings -> Secrets and variables -> Actions):
+#   secret  AWS_ROLE_ARN                 IAM role to assume (OIDC).  REQUIRED.
+#   var     AWS_REGION                   defaults to us-east-1
+#   var     S3_BUCKET                    defaults to www.savvytechies.com
+#   var     CLOUDFRONT_DISTRIBUTION_ID   defaults to E3OEC4DI1YRJ40
+#
+# See .github/DEPLOYMENT.md for the one-time AWS IAM/OIDC setup.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+# Never run two deploys at once; cancel superseded runs.
+concurrency:
+  group: deploy-website
+  cancel-in-progress: false
+
+permissions:
+  id-token: write   # required for OIDC
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
+      S3_BUCKET: ${{ vars.S3_BUCKET || 'www.savvytechies.com' }}
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID || 'E3OEC4DI1YRJ40' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Sync to S3
+        run: |
+          set -euo pipefail
+          # 1) Full sync with deletions; short cache so HTML/updates are picked up.
+          aws s3 sync dist/ "s3://${S3_BUCKET}" --delete \
+            --cache-control "public,max-age=0,must-revalidate"
+          # 2) Re-upload fingerprinted assets with a long, immutable cache (no --delete).
+          aws s3 sync dist/ "s3://${S3_BUCKET}" \
+            --exclude "*" --include "_astro/*" \
+            --cache-control "public,max-age=31536000,immutable"
+
+      - name: Invalidate CloudFront
+        run: |
+          set -euo pipefail
+          ID=$(aws cloudfront create-invalidation \
+            --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
+            --paths "/*" --query 'Invalidation.Id' --output text)
+          echo "Invalidation created: $ID"
+          aws cloudfront wait invalidation-completed \
+            --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" --id "$ID"
+          echo "Invalidation $ID complete."
+
+      - name: Summary
+        run: echo "Deployed to https://www.savvytechies.com (bucket ${S3_BUCKET}, dist ${CLOUDFRONT_DISTRIBUTION_ID})" >> "$GITHUB_STEP_SUMMARY"
