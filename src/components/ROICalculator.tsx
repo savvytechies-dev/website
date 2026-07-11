@@ -12,13 +12,10 @@ export default function ROICalculator() {
   //  - SavvyTechies (managed Keycloak): platform base + low per-MAU, priced ~60% under Auth0.
   const round = (n: number) => Math.round(n / 100) * 100;
 
-  // Managed Keycloak: volume-tiered per-MAU/month, no separate platform base.
-  // Tuned to land ~60% under Auth0 at scale while staying competitive at low MAU.
-  const savvyTechiesAnnual = (mau: number) => {
-    const monthly =
-      mau <= 25000 ? mau * 0.045 : 25000 * 0.045 + (mau - 25000) * 0.017;
-    return round(monthly * 12);
-  };
+  // Managed Keycloak: flat $0.02/MAU/month — the canonical published rate.
+  // Grounded in COGS (~$0.0017/MAU/mo infra → ~90% gross margin) and set to land
+  // ~60% under Auth0 at scale. Matches the flat pricing block on the site.
+  const savvyTechiesAnnual = (mau: number) => round(mau * 0.02 * 12);
 
   // Auth0 B2C: self-serve up to ~25K MAU, enterprise (effective, post-discount) beyond.
   const auth0Annual = (mau: number) => {
