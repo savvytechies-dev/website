@@ -9,3 +9,4 @@ dist/
 # Publish just the site code + README.
 /*.md
 !/README.md
+analytics/cloudfront-config.backup.json
