@@ -4,57 +4,76 @@ export default function ROICalculator() {
   const [users, setUsers] = useState(50000);
   const [approach, setApproach] = useState<'diy' | 'auth0' | 'cognito'>('diy');
 
-  // Calculate costs
+  // Calculate costs.
+  // All figures are annual and grounded in published 2026 list pricing:
+  //  - AWS Cognito Essentials: $0.015/MAU, first 10K MAU free (aws.amazon.com/cognito/pricing).
+  //  - Auth0 B2C Enterprise: ~$0.066-$0.085/MAU/mo list, typically discounted 50-70%;
+  //    we model an effective ~$0.05/MAU/mo at scale (auth0.com/pricing + industry quotes).
+  //  - SavvyTechies (managed Keycloak): platform base + low per-MAU, priced ~60% under Auth0.
+  const round = (n: number) => Math.round(n / 100) * 100;
+
+  // Managed Keycloak: volume-tiered per-MAU/month, no separate platform base.
+  // Tuned to land ~60% under Auth0 at scale while staying competitive at low MAU.
+  const savvyTechiesAnnual = (mau: number) => {
+    const monthly =
+      mau <= 25000 ? mau * 0.045 : 25000 * 0.045 + (mau - 25000) * 0.017;
+    return round(monthly * 12);
+  };
+
+  // Auth0 B2C: self-serve up to ~25K MAU, enterprise (effective, post-discount) beyond.
+  const auth0Annual = (mau: number) => {
+    const monthly =
+      mau <= 25000 ? mau * 0.07 : 25000 * 0.07 + (mau - 25000) * 0.05;
+    return round(Math.max(monthly, 150) * 12);
+  };
+
+  // AWS Cognito Essentials ($0.015/MAU, 10K free) + the ops team you still have to run it.
+  const cognitoAnnual = (mau: number) => {
+    const cognito = Math.max(0, mau - 10000) * 0.015 * 12;
+    const ops = mau > 100000 ? 120000 : mau > 25000 ? 60000 : 24000;
+    return round(cognito + ops);
+  };
+
+  // DIY self-managed: identity engineers (loaded cost) + multi-region infra + tooling.
+  const diyAnnual = (mau: number) => {
+    const engineers = mau > 250000 ? 4 : mau > 50000 ? 3 : 2;
+    const infra = mau > 250000 ? 90000 : mau > 50000 ? 48000 : 24000;
+    return round(engineers * 190000 + infra + 24000);
+  };
+
   const calculateCosts = () => {
-    const savvyTechiesCost = users <= 10000 ? 24000 : users <= 100000 ? 75000 : 200000;
+    const savvyTechiesCost = savvyTechiesAnnual(users);
 
     let competitorCost = 0;
     let competitorName = '';
 
     switch (approach) {
       case 'diy':
-        // DIY costs: Infrastructure + personnel + monitoring
-        competitorCost = 2505000 + 1668000; // Fixed + monitoring (traditional)
+        competitorCost = diyAnnual(users);
         competitorName = 'DIY Self-Managed';
         break;
       case 'auth0':
-        // Auth0 B2B: Base + per connection costs
-        if (users <= 30000) {
-          competitorCost = 35 * 12; // Essentials
-        } else if (users <= 100000) {
-          competitorCost = 240 * 12; // Professional
-        } else {
-          competitorCost = 50000; // Enterprise
-        }
-        // Add SSO connection costs (assume 10 connections)
-        competitorCost += users > 10000 ? 40000 : 0;
+        competitorCost = auth0Annual(users);
         competitorName = 'Auth0';
         break;
       case 'cognito':
-        // AWS Cognito: Pay per MAU
-        const mau = users;
-        if (mau <= 50000) {
-          competitorCost = 0;
-        } else if (mau <= 100000) {
-          competitorCost = (mau - 50000) * 0.015 * 12;
-        } else {
-          competitorCost = 50000 * 0.015 * 12 + (mau - 100000) * 0.012 * 12;
-        }
-        // Add operational costs for DIY management
-        competitorCost += 150000; // 1 engineer
+        competitorCost = cognitoAnnual(users);
         competitorName = 'AWS Cognito + Operations';
         break;
     }
 
     const savings = competitorCost - savvyTechiesCost;
-    const savingsPercent = ((savings / competitorCost) * 100).toFixed(1);
+    const savingsPercent =
+      competitorCost > 0
+        ? parseFloat(((savings / competitorCost) * 100).toFixed(1))
+        : 0;
 
     return {
       savvyTechiesCost,
       competitorCost,
       competitorName,
       savings,
-      savingsPercent: parseFloat(savingsPercent)
+      savingsPercent
     };
   };
 
