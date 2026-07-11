@@ -60,8 +60,17 @@ else
 fi
 aws lambda wait function-active-v2 --function-name "$COLLECTOR"
 aws lambda wait function-updated-v2 --function-name "$COLLECTOR"
+# Guard: preserve ORIGIN_SECRET if enforcement was already applied (restrict-and-cleanup.sh),
+# so re-running deploy.sh doesn't silently drop the /collect access control.
+EXISTING_SECRET=$(aws lambda get-function-configuration --function-name "$COLLECTOR" \
+  --query 'Environment.Variables.ORIGIN_SECRET' --output text 2>/dev/null || echo "None")
+SECRET_KV=""
+if [ -n "$EXISTING_SECRET" ] && [ "$EXISTING_SECRET" != "None" ]; then
+  SECRET_KV=",ORIGIN_SECRET=$EXISTING_SECRET"
+  echo "   (preserving existing ORIGIN_SECRET)"
+fi
 aws lambda update-function-configuration --function-name "$COLLECTOR" \
-  --environment "Variables={EVENTS_BUCKET=$BUCKET,ANONYMIZE_IP=$ANONYMIZE_IP}" >/dev/null
+  --environment "Variables={EVENTS_BUCKET=$BUCKET,ANONYMIZE_IP=$ANONYMIZE_IP$SECRET_KV}" >/dev/null
 aws lambda wait function-updated-v2 --function-name "$COLLECTOR"
 
 echo "==> 4/7 collector Function URL"
