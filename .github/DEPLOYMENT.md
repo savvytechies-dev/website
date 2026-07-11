@@ -30,7 +30,7 @@ aws iam create-open-id-connect-provider \
     "Action": "sts:AssumeRoleWithWebIdentity",
     "Condition": {
       "StringEquals": { "token.actions.githubusercontent.com:aud": "sts.amazonaws.com" },
-      "StringLike":   { "token.actions.githubusercontent.com:sub": "repo:savvytechies/website:*" }
+      "StringLike":   { "token.actions.githubusercontent.com:sub": "repo:savvytechies-dev/website:*" }
     }
   }]
 }
@@ -59,7 +59,7 @@ aws iam put-role-policy --role-name savvytechies-website-deploy \
 
 ### 4. Tell GitHub the role ARN
 ```sh
-gh secret set AWS_ROLE_ARN --repo savvytechies/website \
+gh secret set AWS_ROLE_ARN --repo savvytechies-dev/website \
   --body "arn:aws:iam::<ACCOUNT_ID>:role/savvytechies-website-deploy"
 ```
 (or Settings → Secrets and variables → Actions → New repository secret)
