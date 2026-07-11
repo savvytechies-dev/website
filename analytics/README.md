@@ -26,7 +26,14 @@ EventBridge (daily cron) ──▶ Reporter Lambda ──▶ SES email (HTML rep
 > the Lambda Function URL. CloudFront OAC → Function URL can't sign POST bodies
 > (`InvalidSignatureException`), so a beacon with a JSON body fails under OAC. API
 > Gateway needs no request signing and still receives the CloudFront geo headers.
-> The Function URL created by `deploy.sh` is now vestigial (IAM-auth, unused).
+
+## Access control (/collect locked to CloudFront)
+The API Gateway URL is public, so to stop direct/forged posts CloudFront injects a
+secret **`X-Origin-Secret`** custom header on every `/collect` origin request, and the
+collector rejects (403) any request missing it. The secret is server-side only (added
+CloudFront→origin, never exposed to browsers). HTTP APIs have no native API keys — this
+header-secret is the standard equivalent. Run `restrict-and-cleanup.sh` to apply it and
+delete the vestigial Function URL. Rotate by re-running the script (new random secret).
 
 ## Files
 | File | Purpose |
@@ -36,6 +43,7 @@ EventBridge (daily cron) ──▶ Reporter Lambda ──▶ SES email (HTML rep
 | `reporter.mjs` | daily Lambda: aggregate yesterday + SES email |
 | `deploy.sh` | provisions S3, IAM, both Lambdas, daily schedule |
 | `switch-to-apigw.sh` | creates the HTTP API and points CloudFront `/collect` at it |
+| `restrict-and-cleanup.sh` | locks `/collect` to CloudFront (secret header) + deletes Function URL |
 
 ## Deploy
 ```bash
