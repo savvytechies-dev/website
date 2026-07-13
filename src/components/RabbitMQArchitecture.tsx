@@ -1,251 +1,128 @@
-export default function RabbitMQArchitecture() {
-  return (
-    <svg
-      viewBox="0 0 1200 700"
-      className="w-full h-auto"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style={{ stopColor: '#f97316', stopOpacity: 1 }} />
-          <stop offset="100%" style={{ stopColor: '#ea580c', stopOpacity: 1 }} />
-        </linearGradient>
-        <linearGradient id="tealGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" style={{ stopColor: '#14b8a6', stopOpacity: 1 }} />
-          <stop offset="100%" style={{ stopColor: '#0d9488', stopOpacity: 1 }} />
-        </linearGradient>
-        <filter id="shadow">
-          <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.3"/>
-        </filter>
-      </defs>
+import { DiagramSvg, Lane, Node, Connector, ConnLabel, tokens } from "./diagram/primitives";
 
-      {/* Title */}
-      <text x="600" y="40" textAnchor="middle" fontSize="28" fontWeight="bold" fill="#1f2937">
-        High-Availability RabbitMQ Cluster
+// Honest, roadmap-framed picture of how we *would* run managed RabbitMQ —
+// consistent with how we already run managed Keycloak: ECS Fargate, multi-AZ,
+// single-region by default, cross-cloud as a premium active-passive option.
+// No AI-autonomous ops. Clearly badged as ROADMAP / not yet GA.
+export default function RabbitMQArchitecture() {
+  const rowY = [196, 278, 360]; // shared top-Ys (h=64) → centers 228 / 310 / 392
+
+  const producers = [
+    { title: "Microservices", subtitle: "publish domain events", icon: "container" as const },
+    { title: "API gateway", subtitle: "REST / GraphQL", icon: "api" as const },
+    { title: "Web / app events", subtitle: "frontend telemetry", icon: "globe" as const },
+  ];
+  const brokers = [
+    { title: "Broker 1", subtitle: "us-east-1a · Fargate" },
+    { title: "Broker 2", subtitle: "us-east-1b · Fargate" },
+    { title: "Broker 3", subtitle: "us-east-1c · Fargate" },
+  ];
+  const queues = [
+    { title: "orders", subtitle: "quorum queue" },
+    { title: "payments", subtitle: "quorum queue" },
+    { title: "notifications", subtitle: "quorum queue" },
+  ];
+  const consumers = [
+    { title: "Order processor", subtitle: "consumes orders", icon: "fargate" as const },
+    { title: "Payment handler", subtitle: "consumes payments", icon: "billing" as const },
+    { title: "Notification sender", subtitle: "consumes notifications", icon: "mail" as const },
+  ];
+
+  return (
+    <DiagramSvg title="Managed RabbitMQ — on our roadmap" viewBox="0 0 1200 780">
+      {/* ROADMAP badge pill (amber) */}
+      <g>
+        <rect x={506} y={48} width={188} height={22} rx={11} fill="#fffbeb" stroke="#f59e0b" strokeWidth={1.25} />
+        <text x={600} y={63} textAnchor="middle" fontSize={11} fontWeight={700} fill="#92400e" style={{ letterSpacing: "0.08em" }}>
+          ROADMAP · NOT YET GA
+        </text>
+      </g>
+
+      {/* Producers lane (neutral) */}
+      <Lane x={40} y={96} w={250} h={410} fam="neutral" label="Producers" />
+      {producers.map((p, i) => (
+        <Node key={p.title} x={60} y={rowY[i]} w={210} h={64} fam="neutral" icon={p.icon} title={p.title} subtitle={p.subtitle} />
+      ))}
+
+      {/* Producers → exchange (publish) */}
+      <Connector d="M270,228 L336,288" />
+      <Connector d="M270,310 L336,310" />
+      <Connector d="M270,392 L336,332" />
+
+      {/* AWS region (orange dashed) — multi-AZ Fargate cluster */}
+      <Lane x={320} y={96} w={560} h={410} fam="neutral" region />
+      <circle cx={340} cy={120} r={4} fill="#f59e0b" />
+      <text x={352} y={124} fontSize={12} fontWeight={700} fill="#b45309" style={{ letterSpacing: "0.06em" }}>
+        AWS REGION · MULTI-AZ
       </text>
 
-      {/* Producers Section */}
-      <g filter="url(#shadow)">
-        <rect x="50" y="100" width="200" height="400" rx="8" fill="#f0fdf4" stroke="#10b981" strokeWidth="2"/>
-        <text x="150" y="130" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#059669">
-          Producers
-        </text>
+      {/* Exchange (storage) */}
+      <Node x={336} y={272} w={132} h={76} fam="storage" icon="stream" title="Exchange" subtitle="topic routing" center />
 
-        {/* Producer instances */}
-        <rect x="70" y="150" width="160" height="60" rx="6" fill="url(#tealGrad)"/>
-        <text x="150" y="175" textAnchor="middle" fontSize="13" fontWeight="bold" fill="white">
-          Microservice A
-        </text>
-        <text x="150" y="195" textAnchor="middle" fontSize="10" fill="white" opacity="0.9">
-          Order Service
-        </text>
+      {/* Broker cluster on Fargate (compute) — one per AZ */}
+      {brokers.map((b, i) => (
+        <Node key={b.title} x={488} y={rowY[i]} w={176} h={64} fam="compute" icon="container" title={b.title} subtitle={b.subtitle} />
+      ))}
 
-        <rect x="70" y="230" width="160" height="60" rx="6" fill="url(#tealGrad)"/>
-        <text x="150" y="255" textAnchor="middle" fontSize="13" fontWeight="bold" fill="white">
-          Microservice B
-        </text>
-        <text x="150" y="275" textAnchor="middle" fontSize="10" fill="white" opacity="0.9">
-          Payment Service
-        </text>
+      {/* Intra-cluster quorum replication across AZs */}
+      <line x1={480} y1={222} x2={480} y2={398} stroke={tokens.line} strokeWidth={1.5} strokeDasharray="5,4" />
+      <ConnLabel x={576} y={182} text="quorum replication across AZs" />
 
-        <rect x="70" y="310" width="160" height="60" rx="6" fill="url(#tealGrad)"/>
-        <text x="150" y="335" textAnchor="middle" fontSize="13" fontWeight="bold" fill="white">
-          API Gateway
-        </text>
-        <text x="150" y="355" textAnchor="middle" fontSize="10" fill="white" opacity="0.9">
-          REST/GraphQL
-        </text>
+      {/* Exchange → brokers */}
+      <Connector d="M468,292 L488,228" />
+      <Connector d="M468,310 L488,310" />
+      <Connector d="M468,328 L488,392" />
 
-        <rect x="70" y="390" width="160" height="60" rx="6" fill="url(#tealGrad)"/>
-        <text x="150" y="415" textAnchor="middle" fontSize="13" fontWeight="bold" fill="white">
-          Web Application
-        </text>
-        <text x="150" y="435" textAnchor="middle" fontSize="10" fill="white" opacity="0.9">
-          Frontend Events
-        </text>
-      </g>
+      {/* Quorum queues (storage) */}
+      {queues.map((q, i) => (
+        <Node key={q.title} x={690} y={rowY[i]} w={160} h={64} fam="storage" icon="queue" title={q.title} subtitle={q.subtitle} />
+      ))}
 
-      {/* Arrows from producers to cluster */}
-      <defs>
-        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-          <polygon points="0 0, 10 3, 0 6" fill="#6b7280" />
-        </marker>
-      </defs>
-      <path d="M 250 180 L 330 240" stroke="#6b7280" strokeWidth="2" fill="none" markerEnd="url(#arrow)"/>
-      <path d="M 250 260 L 330 280" stroke="#6b7280" strokeWidth="2" fill="none" markerEnd="url(#arrow)"/>
-      <path d="M 250 340 L 330 320" stroke="#6b7280" strokeWidth="2" fill="none" markerEnd="url(#arrow)"/>
-      <path d="M 250 420 L 330 360" stroke="#6b7280" strokeWidth="2" fill="none" markerEnd="url(#arrow)"/>
+      {/* Brokers → queues */}
+      <Connector d="M664,228 L690,228" />
+      <Connector d="M664,310 L690,310" />
+      <Connector d="M664,392 L690,392" />
 
-      {/* RabbitMQ Cluster */}
-      <g filter="url(#shadow)">
-        <rect x="330" y="150" width="540" height="400" rx="8" fill="#fff7ed" stroke="#ea580c" strokeWidth="3"/>
-        <text x="600" y="180" textAnchor="middle" fontSize="18" fontWeight="bold" fill="#c2410c">
-          RabbitMQ Cluster (Multi-Cloud)
-        </text>
+      {/* Region caption */}
+      <text x={600} y={472} textAnchor="middle" fontSize={11.5} fontWeight={600} fill={tokens.fam.compute.ink}>
+        3-node cluster on Fargate · quorum queues · mirrored for HA
+      </text>
 
-        {/* Node 1 */}
-        <g>
-          <rect x="360" y="210" width="140" height="160" rx="6" fill="#fff" stroke="#f97316" strokeWidth="2"/>
-          <text x="430" y="235" textAnchor="middle" fontSize="14" fontWeight="bold" fill="#ea580c">
-            Node 1 (AWS)
-          </text>
-          <text x="430" y="255" textAnchor="middle" fontSize="11" fill="#9a3412">
-            Leader
-          </text>
+      {/* Queues → consumers (consume) */}
+      <Connector d="M850,228 L928,228" />
+      <Connector d="M850,310 L928,310" />
+      <Connector d="M850,392 L928,392" />
 
-          {/* Queue icons */}
-          <rect x="370" y="270" width="120" height="30" rx="3" fill="#fed7aa" stroke="#f97316" strokeWidth="1"/>
-          <text x="430" y="290" textAnchor="middle" fontSize="10" fill="#9a3412">Queue: orders</text>
+      {/* Consumers lane (neutral) */}
+      <Lane x={910} y={96} w={250} h={410} fam="neutral" label="Consumers" />
+      {consumers.map((c, i) => (
+        <Node key={c.title} x={930} y={rowY[i]} w={210} h={64} fam="neutral" icon={c.icon} title={c.title} subtitle={c.subtitle} />
+      ))}
 
-          <rect x="370" y="310" width="120" height="30" rx="3" fill="#fed7aa" stroke="#f97316" strokeWidth="1"/>
-          <text x="430" y="330" textAnchor="middle" fontSize="10" fill="#9a3412">Queue: payments</text>
+      {/* Management strip (serverless) */}
+      <Node
+        x={40} y={530} w={1120} h={52} fam="serverless" icon="analytics" center
+        title="Management UI & metrics"
+        subtitle="queue depth · consumer lag · throughput"
+      />
 
-          <text x="430" y="360" textAnchor="middle" fontSize="9" fill="#78716c">
-            Mirror: ✓
-          </text>
-        </g>
+      {/* Managed-by strip (edge) */}
+      <Node
+        x={40} y={598} w={1120} h={56} fam="edge" icon="shield" center
+        title="Managed by the SavvyTechies control plane"
+        subtitle="provisioning · monitoring · autoscaling · backups"
+      />
 
-        {/* Node 2 */}
-        <g>
-          <rect x="530" y="210" width="140" height="160" rx="6" fill="#fff" stroke="#f97316" strokeWidth="2"/>
-          <text x="600" y="235" textAnchor="middle" fontSize="14" fontWeight="bold" fill="#ea580c">
-            Node 2 (Azure)
-          </text>
-          <text x="600" y="255" textAnchor="middle" fontSize="11" fill="#9a3412">
-            Follower
-          </text>
-
-          {/* Queue icons */}
-          <rect x="540" y="270" width="120" height="30" rx="3" fill="#fed7aa" stroke="#f97316" strokeWidth="1"/>
-          <text x="600" y="290" textAnchor="middle" fontSize="10" fill="#9a3412">Queue: orders</text>
-
-          <rect x="540" y="310" width="120" height="30" rx="3" fill="#fed7aa" stroke="#f97316" strokeWidth="1"/>
-          <text x="600" y="330" textAnchor="middle" fontSize="10" fill="#9a3412">Queue: payments</text>
-
-          <text x="600" y="360" textAnchor="middle" fontSize="9" fill="#78716c">
-            Mirror: ✓
-          </text>
-        </g>
-
-        {/* Node 3 */}
-        <g>
-          <rect x="700" y="210" width="140" height="160" rx="6" fill="#fff" stroke="#f97316" strokeWidth="2"/>
-          <text x="770" y="235" textAnchor="middle" fontSize="14" fontWeight="bold" fill="#ea580c">
-            Node 3 (GCP)
-          </text>
-          <text x="770" y="255" textAnchor="middle" fontSize="11" fill="#9a3412">
-            Follower
-          </text>
-
-          {/* Queue icons */}
-          <rect x="710" y="270" width="120" height="30" rx="3" fill="#fed7aa" stroke="#f97316" strokeWidth="1"/>
-          <text x="770" y="290" textAnchor="middle" fontSize="10" fill="#9a3412">Queue: orders</text>
-
-          <rect x="710" y="310" width="120" height="30" rx="3" fill="#fed7aa" stroke="#f97316" strokeWidth="1"/>
-          <text x="770" y="330" textAnchor="middle" fontSize="10" fill="#9a3412">Queue: payments</text>
-
-          <text x="770" y="360" textAnchor="middle" fontSize="9" fill="#78716c">
-            Mirror: ✓
-          </text>
-        </g>
-
-        {/* Replication arrows between nodes */}
-        <path d="M 500 300 L 530 300" stroke="#f97316" strokeWidth="2" strokeDasharray="5,5" fill="none" markerEnd="url(#arrow)"/>
-        <path d="M 660 300 L 700 300" stroke="#f97316" strokeWidth="2" strokeDasharray="5,5" fill="none" markerEnd="url(#arrow)"/>
-        <path d="M 530 320 L 500 320" stroke="#f97316" strokeWidth="2" strokeDasharray="5,5" fill="none" markerEnd="url(#arrow)"/>
-        <path d="M 700 320 L 660 320" stroke="#f97316" strokeWidth="2" strokeDasharray="5,5" fill="none" markerEnd="url(#arrow)"/>
-
-        {/* Management UI */}
-        <rect x="360" y="400" width="480" height="50" rx="6" fill="#fef3c7" stroke="#f59e0b" strokeWidth="2"/>
-        <text x="600" y="425" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#92400e">
-          Management UI & Monitoring
-        </text>
-        <text x="600" y="442" textAnchor="middle" fontSize="10" fill="#78350f">
-          Real-time metrics • Queue depth • Consumer lag • Throughput
-        </text>
-
-        {/* Cluster info */}
-        <text x="600" y="485" textAnchor="middle" fontSize="11" fill="#78716c">
-          Quorum Queues • Publisher Confirms • HA Policy: all
-        </text>
-      </g>
-
-      {/* Consumers Section */}
-      <g filter="url(#shadow)">
-        <rect x="950" y="100" width="200" height="400" rx="8" fill="#eff6ff" stroke="#3b82f6" strokeWidth="2"/>
-        <text x="1050" y="130" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#1e40af">
-          Consumers
-        </text>
-
-        {/* Consumer instances */}
-        <rect x="970" y="150" width="160" height="60" rx="6" fill="#3b82f6"/>
-        <text x="1050" y="175" textAnchor="middle" fontSize="13" fontWeight="bold" fill="white">
-          Worker Pool 1
-        </text>
-        <text x="1050" y="195" textAnchor="middle" fontSize="10" fill="white" opacity="0.9">
-          Order Processor
-        </text>
-
-        <rect x="970" y="230" width="160" height="60" rx="6" fill="#3b82f6"/>
-        <text x="1050" y="255" textAnchor="middle" fontSize="13" fontWeight="bold" fill="white">
-          Worker Pool 2
-        </text>
-        <text x="1050" y="275" textAnchor="middle" fontSize="10" fill="white" opacity="0.9">
-          Payment Handler
-        </text>
-
-        <rect x="970" y="310" width="160" height="60" rx="6" fill="#3b82f6"/>
-        <text x="1050" y="335" textAnchor="middle" fontSize="13" fontWeight="bold" fill="white">
-          Email Service
-        </text>
-        <text x="1050" y="355" textAnchor="middle" fontSize="10" fill="white" opacity="0.9">
-          Notification Sender
-        </text>
-
-        <rect x="970" y="390" width="160" height="60" rx="6" fill="#3b82f6"/>
-        <text x="1050" y="415" textAnchor="middle" fontSize="13" fontWeight="bold" fill="white">
-          Analytics
-        </text>
-        <text x="1050" y="435" textAnchor="middle" fontSize="10" fill="white" opacity="0.9">
-          Event Aggregator
-        </text>
-      </g>
-
-      {/* Arrows from cluster to consumers */}
-      <path d="M 870 240 L 970 180" stroke="#6b7280" strokeWidth="2" fill="none" markerEnd="url(#arrow)"/>
-      <path d="M 870 280 L 970 260" stroke="#6b7280" strokeWidth="2" fill="none" markerEnd="url(#arrow)"/>
-      <path d="M 870 320 L 970 340" stroke="#6b7280" strokeWidth="2" fill="none" markerEnd="url(#arrow)"/>
-      <path d="M 870 360 L 970 420" stroke="#6b7280" strokeWidth="2" fill="none" markerEnd="url(#arrow)"/>
-
-      {/* AI Layer */}
-      <g filter="url(#shadow)">
-        <rect x="50" y="580" width="1100" height="80" rx="8" fill="#c7d2fe" stroke="#6366f1" strokeWidth="2"/>
-        <text x="600" y="610" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#3730a3">
-          🤖 AI-Powered Auto-Scaling & Monitoring
-        </text>
-        <text x="600" y="633" textAnchor="middle" fontSize="12" fill="#4338ca">
-          Queue depth analysis • Consumer lag detection • Predictive scaling • Automatic node recovery
-        </text>
-        <text x="600" y="653" textAnchor="middle" fontSize="11" fill="#4338ca">
-          Anomaly detection • Dead letter queue management • Performance optimization
-        </text>
-      </g>
-
-      {/* Legend */}
-      <g>
-        <text x="50" y="30" fontSize="12" fontWeight="bold" fill="#6b7280">Legend:</text>
-        <rect x="140" y="22" width="12" height="12" fill="#14b8a6" rx="2"/>
-        <text x="158" y="30" fontSize="10" fill="#6b7280">Producer</text>
-
-        <rect x="230" y="22" width="12" height="12" fill="#f97316" rx="2"/>
-        <text x="248" y="30" fontSize="10" fill="#6b7280">RabbitMQ Node</text>
-
-        <rect x="360" y="22" width="12" height="12" fill="#3b82f6" rx="2"/>
-        <text x="378" y="30" fontSize="10" fill="#6b7280">Consumer</text>
-
-        <line x1="470" y1="28" x2="500" y2="28" stroke="#f97316" strokeWidth="2" strokeDasharray="5,5"/>
-        <text x="508" y="30" fontSize="10" fill="#6b7280">Mirroring</text>
-      </g>
-    </svg>
+      {/* Bottom caption — honest tiering */}
+      <text x={600} y={694} textAnchor="middle" fontSize={12.5} fontWeight={700} fill={tokens.body}>
+        Default: single-region multi-AZ. Premium: cross-region / cross-cloud active-passive via federation / shovel.
+      </text>
+      <text x={600} y={715} textAnchor="middle" fontSize={10.5} fill={tokens.muted}>
+        Runs on ECS Fargate with quorum queues for HA. Cross-cloud is an opt-in premium tier — not the default.
+      </text>
+      <text x={600} y={735} textAnchor="middle" fontSize={10} fill={tokens.muted}>
+        Roadmap item — managed RabbitMQ is not yet generally available.
+      </text>
+    </DiagramSvg>
   );
 }
