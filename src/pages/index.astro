@@ -138,68 +138,100 @@ import ROICalculator from '../components/ROICalculator';
           </a>
         </div>
 
-        <!-- RabbitMQ Service -->
+        <!-- Managed Authorization -->
         <div class="bg-gray-50 rounded-xl p-8 hover:shadow-xl transition">
-          <div class="text-4xl mb-4">🐰</div>
-          <h3 class="text-2xl font-bold mb-4">Managed RabbitMQ</h3>
+          <div class="flex items-center justify-between mb-4">
+            <div class="text-4xl">🛡️</div>
+            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">ROADMAP</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-4">Managed Authorization</h3>
           <p class="text-gray-600 mb-6">
-            Reliable message queuing with automatic clustering, monitoring, and scaling across clouds.
+            Fine-grained, relationship-based authorization — the natural companion to Keycloak's authentication.
           </p>
           <ul class="space-y-3 mb-6">
             <li class="flex items-start">
               <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
               </svg>
-              <span>High Availability Clustering</span>
+              <span>OpenFGA / SpiceDB (Zanzibar model)</span>
             </li>
             <li class="flex items-start">
               <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
               </svg>
-              <span>Auto-scaling</span>
+              <span>Policy as data, not code</span>
             </li>
             <li class="flex items-start">
               <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
               </svg>
-              <span>Real-time Monitoring</span>
+              <span>Millions of checks, ms latency</span>
             </li>
           </ul>
-          <a href="/rabbitmq" class="text-primary-600 font-semibold hover:text-primary-700">
-            Learn More →
+          <a href="/#contact" class="text-primary-600 font-semibold hover:text-primary-700">
+            Talk to us →
           </a>
         </div>
 
-        <!-- Kafka Service -->
+        <!-- Managed Secrets -->
         <div class="bg-gray-50 rounded-xl p-8 hover:shadow-xl transition">
-          <div class="text-4xl mb-4">⚡</div>
-          <h3 class="text-2xl font-bold mb-4">Managed Kafka</h3>
+          <div class="flex items-center justify-between mb-4">
+            <div class="text-4xl">🗝️</div>
+            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full">ROADMAP</span>
+          </div>
+          <h3 class="text-2xl font-bold mb-4">Managed Secrets</h3>
           <p class="text-gray-600 mb-6">
-            High-throughput event streaming platform for real-time data pipelines and streaming analytics.
+            Secrets, dynamic credentials, and PKI — OpenBao/Vault-compatible, fully managed on AWS.
           </p>
           <ul class="space-y-3 mb-6">
             <li class="flex items-start">
               <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
               </svg>
-              <span>Multi-Region Replication</span>
+              <span>Dynamic DB / cloud credentials</span>
             </li>
             <li class="flex items-start">
               <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
               </svg>
-              <span>Exactly-Once Semantics</span>
+              <span>PKI &amp; certificate issuance</span>
             </li>
             <li class="flex items-start">
               <svg class="h-6 w-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
               </svg>
-              <span>Schema Registry</span>
+              <span>Full audit trail</span>
             </li>
           </ul>
-          <a href="/kafka" class="text-primary-600 font-semibold hover:text-primary-700">
-            Learn More →
+          <a href="/#contact" class="text-primary-600 font-semibold hover:text-primary-700">
+            Talk to us →
           </a>
+        </div>
+      </div>
+
+      <!-- Free developer tools -->
+      <div class="mt-14">
+        <div class="text-center mb-6">
+          <h3 class="text-2xl font-bold">Free developer tools</h3>
+          <p class="text-gray-600">Built for the identity community — no account needed.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">🩺</div>
+              <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full">FREE · COMING SOON</span>
+            </div>
+            <h4 class="text-lg font-bold mb-2">Keycloak Analyzer</h4>
+            <p class="text-gray-600 text-sm">Paste a realm export → an instant, AI-assisted security &amp; production-readiness audit. Nothing stored.</p>
+          </div>
+          <div class="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">🧪</div>
+              <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full">FREE · COMING SOON</span>
+            </div>
+            <h4 class="text-lg font-bold mb-2">OIDC / JWT Playground</h4>
+            <p class="text-gray-600 text-sm">Decode &amp; verify JWTs, inspect OIDC discovery, and test PKCE flows in the browser.</p>
+          </div>
         </div>
       </div>
     </div>
