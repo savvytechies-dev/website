@@ -36,7 +36,7 @@ import Footer from '../components/Footer.astro';
           class="w-full font-mono text-xs p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           placeholder='{ "realm": "acme-prod", "sslRequired": "external", "clients": [ ... ] }'
         ></textarea>
-        <div class="flex items-center gap-3 mt-3">
+        <div class="flex items-center gap-3 mt-3 flex-wrap">
           <button id="az-run" class="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-5 py-2.5 rounded-lg disabled:opacity-50">
             Analyze
           </button>
@@ -45,6 +45,12 @@ import Footer from '../components/Footer.astro';
             <input id="az-file" type="file" accept=".json,application/json" class="hidden" />
           </label>
           <span id="az-error" class="text-sm text-red-600"></span>
+        </div>
+        <div class="flex items-center gap-2 mt-3 text-sm">
+          <span class="text-gray-500">No export handy? Load an example:</span>
+          <button data-example="hardened" class="text-green-700 font-medium hover:underline">Hardened (A)</button>
+          <span class="text-gray-300">·</span>
+          <button data-example="weak" class="text-red-600 font-medium hover:underline">Needs work (F)</button>
         </div>
         <p class="text-xs text-gray-500 mt-3">
           In Keycloak: <span class="font-mono">Realm settings → Action → Partial export</span>. Export
@@ -62,6 +68,55 @@ import Footer from '../components/Footer.astro';
 <script>
   const API = 'https://analyzer.savvytechies.com/analyze';
   const MAX = 3 * 1024 * 1024;
+
+  // Sample realm exports so visitors can try the tool without their own file.
+  const EXAMPLES = {
+    hardened: {
+      realm: 'acme-prod',
+      enabled: true,
+      sslRequired: 'external',
+      bruteForceProtected: true,
+      permanentLockout: false,
+      passwordPolicy: 'length(12) and notUsername and notEmail',
+      registrationAllowed: false,
+      verifyEmail: true,
+      accessTokenLifespan: 300,
+      ssoSessionIdleTimeout: 1800,
+      ssoSessionMaxLifespan: 36000,
+      revokeRefreshToken: true,
+      eventsEnabled: true,
+      adminEventsEnabled: true,
+      browserSecurityHeaders: { xFrameOptions: 'SAMEORIGIN' },
+      clients: [
+        { clientId: 'acme-spa', publicClient: true, standardFlowEnabled: true, implicitFlowEnabled: false,
+          redirectUris: ['https://app.acme.com/callback'], webOrigins: ['https://app.acme.com'],
+          attributes: { 'pkce.code.challenge.method': 'S256' } },
+        { clientId: 'acme-backend', publicClient: false, standardFlowEnabled: true,
+          redirectUris: ['https://api.acme.com/callback'], webOrigins: ['https://api.acme.com'] },
+      ],
+    },
+    weak: {
+      realm: 'acme-prod',
+      enabled: true,
+      sslRequired: 'external',
+      bruteForceProtected: true,
+      passwordPolicy: '',
+      registrationAllowed: true,
+      verifyEmail: false,
+      accessTokenLifespan: 3600,
+      ssoSessionIdleTimeout: 1800,
+      revokeRefreshToken: false,
+      eventsEnabled: false,
+      adminEventsEnabled: false,
+      browserSecurityHeaders: { xFrameOptions: 'SAMEORIGIN' },
+      clients: [
+        { clientId: 'acme-spa', publicClient: true, standardFlowEnabled: true,
+          redirectUris: ['https://app.acme.com/*'], webOrigins: ['*'], attributes: {} },
+        { clientId: 'acme-backend', publicClient: false, standardFlowEnabled: true,
+          redirectUris: ['https://api.acme.com/callback'], webOrigins: ['https://api.acme.com'] },
+      ],
+    },
+  };
   const SEV = ['critical', 'high', 'medium', 'low', 'info'];
   const SEVBG = { critical: '#b42318', high: '#dc2626', medium: '#d97706', low: '#64748b', info: '#16a34a' };
 
@@ -160,6 +215,13 @@ import Footer from '../components/Footer.astro';
   }
 
   $('az-run').addEventListener('click', analyze);
+  document.querySelectorAll('[data-example]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const key = b.getAttribute('data-example');
+      $('az-text').value = JSON.stringify(EXAMPLES[key], null, 2);
+      $('az-error').textContent = '';
+    }),
+  );
   $('az-file').addEventListener('change', (e) => {
     const file = e.target.files?.[0];
     e.target.value = '';
