@@ -234,4 +234,8 @@ import Footer from '../components/Footer.astro';
     reader.onload = () => ($('az-text').value = String(reader.result));
     reader.readAsText(file);
   });
+
+  // Seed the box so the tool is never a blank wall — a sample "needs work" export
+  // the visitor can Analyze immediately (or swap via the example buttons / upload).
+  if (!$('az-text').value) $('az-text').value = JSON.stringify(EXAMPLES.weak, null, 2);
 </script>

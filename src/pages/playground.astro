@@ -42,7 +42,13 @@ import Footer from '../components/Footer.astro';
             placeholder="JWKS URL (optional, to verify signature) — e.g. https://auth…/realms/acme/protocol/openid-connect/certs" />
           <button id="jwt-go" class="bg-primary-600 text-white font-semibold px-5 py-2 rounded-lg">Decode</button>
         </div>
-        <p class="text-xs text-gray-500 mt-2">Tip: paste your issuer in the OIDC tab to find the JWKS URL automatically.</p>
+        <div class="flex items-center gap-2 mt-2 text-sm flex-wrap">
+          <span class="text-gray-500">New here?</span>
+          <button id="jwt-example" class="text-primary-600 font-medium hover:underline">Load a sample token</button>
+          <span class="text-gray-300">·</span>
+          <button id="jwt-copy" class="text-primary-600 font-medium hover:underline">Copy it</button>
+          <span class="text-gray-400 text-xs">— decodes as-is; add a JWKS to verify your own.</span>
+        </div>
         <div id="jwt-out" class="mt-4 hidden"></div>
       </div>
 
@@ -56,6 +62,11 @@ import Footer from '../components/Footer.astro';
           <button id="oidc-go" class="bg-primary-600 text-white font-semibold px-5 py-2 rounded-lg">Fetch</button>
         </div>
         <p class="text-xs text-gray-500 mt-2">Fetches <code>&lt;issuer&gt;/.well-known/openid-configuration</code>.</p>
+        <div class="flex items-center gap-2 mt-2 text-sm flex-wrap">
+          <span class="text-gray-500">Example:</span>
+          <button id="oidc-example" class="text-primary-600 font-medium hover:underline">Load a live SavvyTechies realm</button>
+          <span class="text-gray-400 text-xs">— a real, public discovery document.</span>
+        </div>
         <div id="oidc-out" class="mt-4 hidden"></div>
       </div>
 
@@ -86,6 +97,14 @@ import Footer from '../components/Footer.astro';
   const $ = (id) => document.getElementById(id);
   const err = (m) => ($('pg-error').textContent = m || '');
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+  // --- ready-to-run examples (so the boxes are never a blank wall) ---
+  // A syntactically real RS256 access token with typical Keycloak claims. It
+  // decodes as-is (the signature is a placeholder — decoding never checks it).
+  const SAMPLE_JWT =
+    'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNUOXhRMl9rRXhhbXBsZVNpZ25pbmdLZXkwMSJ9.eyJleHAiOjE4OTM0NTYwMDAsImlhdCI6MTczNTY4OTYwMCwiYXV0aF90aW1lIjoxNzM1Njg5NjAwLCJqdGkiOiJiN2MxZjJlNC05YTNkLTRjNmYtOGUyMS0wZjVhMmM5ZDFiNDQiLCJpc3MiOiJodHRwczovL2F1dGguc2F2dnl0ZWNoaWVzLmNvbS9yZWFsbXMvYWNtZS1wcm9kIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImY6OWQyYjdjMTAtYWNtZTpqYW5lLmRvZSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFjbWUtc3RvcmVmcm9udC13ZWIiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwiZGVmYXVsdC1yb2xlcy1hY21lLXByb2QiLCJ1bWFfYXV0aG9yaXphdGlvbiIsImN1c3RvbWVyIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IkphbmUgRG9lIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiamFuZS5kb2VAYWNtZS5leGFtcGxlIiwiZ2l2ZW5fbmFtZSI6IkphbmUiLCJmYW1pbHlfbmFtZSI6IkRvZSIsImVtYWlsIjoiamFuZS5kb2VAYWNtZS5leGFtcGxlIn0.NHVaYe26MbtOYhSKkoKYdFVomg4i8ZJd8_-RU8VNbftc4TSMb4bXP3l3YlNWACwyXPGffz5aXHc6lty1Y2t4SWRqGteragsVdZufDn5BlnJl9pdR_kdVFUsra2rWKEofkZeIC4yWytE58sMIihvo9H1ScmmVwBcQP6XETqYd0aSHp1gOa9RdUPDvoXQ5oqygTqVtxaDr6wUFKrKItgBMzWIdNZ6y7O9E0DhEPTbE9rfBo6KTFsHAZnMg4k68CDp2woYIaXbmYTWcvbzIuHO7_37GT79XdIwkm95QJ7hYC9RiwrV7mesbY4PAah0R1u';
+  // A real, public Keycloak realm — its discovery document actually loads.
+  const SAMPLE_ISSUER = 'https://auth.savvytechies.com/realms/savvytechies';
 
   // --- tabs ---
   document.querySelectorAll('.pg-tab').forEach((b) =>
@@ -224,4 +243,34 @@ import Footer from '../components/Footer.astro';
       <p class="text-xs text-gray-500 mt-2">Send the challenge on /authorize; send the verifier on /token. Generate a fresh pair per login.</p>`;
     $('pkce-out').classList.remove('hidden');
   });
+
+  // --- examples: prefill the boxes on load + explicit "load"/"copy" buttons ---
+  function loadJwtExample() {
+    $('jwt-in').value = SAMPLE_JWT;
+    err('');
+    $('jwt-go').click();
+  }
+  function loadOidcExample() {
+    $('oidc-in').value = SAMPLE_ISSUER;
+    err('');
+    $('oidc-go').click();
+  }
+  $('jwt-example').addEventListener('click', loadJwtExample);
+  $('oidc-example').addEventListener('click', loadOidcExample);
+  $('jwt-copy').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText($('jwt-in').value || SAMPLE_JWT);
+      const b = $('jwt-copy');
+      const prev = b.textContent;
+      b.textContent = 'Copied ✓';
+      setTimeout(() => (b.textContent = prev), 1500);
+    } catch {
+      err('Clipboard blocked — select the token and copy manually.');
+    }
+  });
+
+  // Seed the boxes so a first-time visitor sees working input, not blank fields.
+  // (Only prefill; we don't auto-run, so nothing surprises them.)
+  if (!$('jwt-in').value) $('jwt-in').value = SAMPLE_JWT;
+  if (!$('oidc-in').value) $('oidc-in').value = SAMPLE_ISSUER;
 </script>
