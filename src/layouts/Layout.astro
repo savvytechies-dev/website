@@ -20,6 +20,58 @@ const { title, description = "Managed Keycloak on AWS — the intelligent identi
   <body class="bg-gray-50 text-gray-900">
     <slot />
 
+    <!-- Chat with Sales: a lightweight contact widget (no live-chat backend) —
+         collects a message + email and opens a pre-filled email to sales, while
+         logging an inquiry beacon so the team is notified. -->
+    <div id="cws" class="fixed bottom-5 right-5 z-50">
+      <button id="cws-toggle" aria-label="Chat with Sales"
+        class="flex items-center gap-2 bg-secondary-600 hover:bg-secondary-700 text-white font-semibold px-5 py-3 rounded-full shadow-lg transition">
+        <span aria-hidden="true">💬</span> Chat with Sales
+      </button>
+      <div id="cws-panel" class="hidden absolute bottom-16 right-0 w-80 max-w-[90vw] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
+        <div class="bg-gradient-to-br from-primary-600 to-secondary-600 text-white p-4">
+          <div class="font-bold">Chat with Sales</div>
+          <div class="text-xs text-blue-100">Tell us what you need — we usually reply within a business day.</div>
+        </div>
+        <div id="cws-form" class="p-4 space-y-3">
+          <input id="cws-email" type="email" placeholder="Work email"
+            class="w-full text-sm px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" />
+          <textarea id="cws-msg" rows="3" placeholder="How can we help? (MAUs, migration, pricing…)"
+            class="w-full text-sm px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"></textarea>
+          <button id="cws-send"
+            class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2 rounded-lg disabled:opacity-50">Send</button>
+          <p class="text-[11px] text-gray-500">Or email <a class="text-primary-600 underline" href="mailto:sales@savvytechies.com">sales@savvytechies.com</a>.</p>
+        </div>
+        <div id="cws-done" class="hidden p-6 text-center text-sm text-gray-700">
+          ✓ Thanks! Your message opened in your email client. We'll be in touch.
+        </div>
+      </div>
+    </div>
+    <script>
+      (() => {
+        const $ = (id) => document.getElementById(id);
+        const panel = $('cws-panel');
+        $('cws-toggle')?.addEventListener('click', () => panel?.classList.toggle('hidden'));
+        $('cws-send')?.addEventListener('click', () => {
+          const email = ($('cws-email') as HTMLInputElement)?.value.trim();
+          const msg = ($('cws-msg') as HTMLTextAreaElement)?.value.trim();
+          if (!msg) return;
+          // Best-effort inquiry beacon (same-origin collector).
+          try {
+            navigator.sendBeacon?.(
+              '/collect',
+              JSON.stringify({ type: 'sales_contact', email, msg, path: location.pathname, ts: Date.now() }),
+            );
+          } catch { /* ignore */ }
+          const subject = encodeURIComponent('Sales inquiry — SavvyTechies');
+          const body = encodeURIComponent(`${msg}\n\nFrom: ${email || '(no email given)'}\nPage: ${location.href}`);
+          window.location.href = `mailto:sales@savvytechies.com?subject=${subject}&body=${body}`;
+          $('cws-form')?.classList.add('hidden');
+          $('cws-done')?.classList.remove('hidden');
+        });
+      })();
+    </script>
+
     <!-- First-party analytics beacon: pageviews + section/CTA clicks. No cookies.
          Posts to same-origin /collect (routed via CloudFront to the collector Lambda). -->
     <script>
