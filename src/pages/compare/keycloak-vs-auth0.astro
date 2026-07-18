@@ -1,0 +1,191 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+
+const faqs = [
+  {
+    q: 'Is Keycloak a good Auth0 alternative?',
+    a: 'Yes, for most B2B SaaS and CIAM use cases. Keycloak is an open-source (Apache-2.0) identity server that covers OIDC, SAML, and LDAP without per-MAU pricing or vendor lock-in, and you own your user store. Auth0 wins on developer experience and time-to-first-login; Keycloak wins on cost at scale, data ownership, and included enterprise features. Managed Keycloak (like SavvyTechies) gives you Auth0-style convenience without the per-MAU bill.',
+  },
+  {
+    q: 'How much cheaper is Keycloak than Auth0?',
+    a: "Auth0 prices per monthly active user (MAU), so cost grows with your user base and can balloon as you scale — enterprise features (SAML enterprise connections, advanced MFA) push you into higher tiers. Keycloak is open-source: you pay for infrastructure (or a flat managed fee), not per user. For fast-growing apps, the difference is often an order of magnitude at scale.",
+  },
+  {
+    q: 'Can I migrate from Auth0 to Keycloak?',
+    a: 'Yes. User profiles export from Auth0 and import into Keycloak via the Admin API or realm import. Passwords are the nuance: Auth0 exports bcrypt hashes, which Keycloak needs to validate — the clean paths are a just-in-time migration (users log in once and get re-hashed) or a one-time reset. This is a well-trodden migration; a managed provider handles the hash + realm setup for you.',
+  },
+  {
+    q: 'Does Keycloak support SAML like Auth0?',
+    a: 'Yes — Keycloak is a native SAML Identity Provider, included for free. In Auth0, SAML enterprise connections are typically gated behind higher-priced tiers. If your customers need SAML SSO, Keycloak gives it to you without an upsell.',
+  },
+  {
+    q: 'Auth0 vs Keycloak for B2B SaaS — which is better?',
+    a: 'Auth0 gets you to a working login fastest and has excellent SDKs. Keycloak is better when per-MAU pricing would hurt, when you need multi-tenant realms, SAML/LDAP without paywalls, or when data ownership and avoiding lock-in matter. Managed Keycloak is the middle path: the convenience of a SaaS with the economics and openness of open source.',
+  },
+];
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Keycloak vs Auth0: The Open-Source Alternative (2026)',
+      description:
+        'Keycloak vs Auth0 compared — pricing (per-MAU vs open-source), lock-in, SAML, self-hosting, developer experience, and migration.',
+      author: { '@type': 'Organization', name: 'SavvyTechies' },
+      publisher: { '@type': 'Organization', name: 'SavvyTechies' },
+      datePublished: '2026-07-18',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<Layout
+  title="Keycloak vs Auth0: The Open-Source Alternative (2026) | SavvyTechies"
+  description="Keycloak vs Auth0 compared — per-MAU pricing vs open-source, vendor lock-in, SAML, self-hosting, DX, and migration. Is managed Keycloak the Auth0 alternative you need?"
+>
+  <Navigation />
+
+  <section class="bg-gradient-to-br from-primary-600 to-secondary-600 text-white py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="uppercase tracking-widest text-indigo-200 text-sm font-semibold mb-3">Comparison</p>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">Keycloak vs. Auth0</h1>
+      <p class="text-xl md:text-2xl text-indigo-100">
+        The polished SaaS vs. the open-source standard. What you actually trade when you pick per-MAU pricing.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-primary-50 border border-primary-100 rounded-2xl p-6 mb-12">
+        <h2 class="text-2xl font-bold mb-3">The short version</h2>
+        <ul class="space-y-2 text-gray-700">
+          <li>🚀 <strong>Auth0</strong> — best-in-class developer experience, huge SDK/integration breadth,
+            fully managed. But <strong>per-MAU pricing that balloons</strong> and a proprietary user store you don't own.</li>
+          <li>🔓 <strong>Keycloak</strong> — open-source (Apache-2.0), self-hostable <em>or</em> managed,
+            standards-native, <strong>SAML and LDAP included free</strong>, and you own your data. Cost scales with
+            infrastructure, not user count.</li>
+          <li>👉 Choose <strong>Auth0</strong> for the fastest first login; choose <strong>Keycloak</strong> to
+            escape per-MAU cost and lock-in — or <strong>managed Keycloak</strong> for both.</li>
+        </ul>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-4">The fundamental difference</h2>
+      <p class="text-gray-700 mb-8">
+        Auth0 is a <strong>proprietary SaaS priced per monthly active user</strong>. Keycloak is an
+        <strong>open-source identity server you own</strong>. Almost every other trade-off follows from that.
+      </p>
+
+      <h2 class="text-3xl font-bold mb-4">Side-by-side</h2>
+      <div class="overflow-x-auto mb-12">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b-2 border-gray-200">
+              <th class="py-3 pr-4 font-semibold">Dimension</th>
+              <th class="py-3 px-4 font-semibold text-primary-700">Keycloak</th>
+              <th class="py-3 px-4 font-semibold text-secondary-700">Auth0</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Pricing model</td><td class="py-3 px-4">✅ Open-source; infra / flat managed</td><td class="py-3 px-4">Per-MAU (grows with users)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Source & data ownership</td><td class="py-3 px-4">✅ Apache-2.0; own & export your users</td><td class="py-3 px-4">Closed; proprietary user store</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Hosting</td><td class="py-3 px-4">Self-host or managed</td><td class="py-3 px-4">SaaS only</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">SAML IdP</td><td class="py-3 px-4">✅ Native, free</td><td class="py-3 px-4">Enterprise connections (higher tiers)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">LDAP / AD federation</td><td class="py-3 px-4">✅ Built-in</td><td class="py-3 px-4">Connector (paid tiers)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Developer experience</td><td class="py-3 px-4">Good (adapters, standards)</td><td class="py-3 px-4">✅ Excellent (SDKs, quickstarts)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Extensibility</td><td class="py-3 px-4">SPIs + themes</td><td class="py-3 px-4">Actions / Rules ecosystem</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Login branding</td><td class="py-3 px-4">✅ Full theme control</td><td class="py-3 px-4">Universal Login (customizable)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Vendor lock-in</td><td class="py-3 px-4">✅ Low (portable standards)</td><td class="py-3 px-4">High</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-4">Where Auth0 wins</h2>
+      <p class="text-gray-700 mb-8">
+        Credit where due: Auth0 has arguably the best developer experience in identity — polished SDKs and
+        quickstarts for every framework, a mature Actions/Rules extensibility model, a broad catalog of social
+        and enterprise connections, and zero operational burden. If your priority is the shortest path to a
+        working login and per-MAU cost is comfortable at your scale, Auth0 is hard to beat.
+      </p>
+
+      <h2 class="text-3xl font-bold mb-4">Where Keycloak wins</h2>
+      <p class="text-gray-700 mb-12">
+        No per-MAU pricing — cost tracks infrastructure, not your user count, so growth doesn't punish you.
+        You <strong>own your user data</strong> and can export in and out on open standards. <strong>SAML and
+        LDAP are included</strong>, not paywalled. You can self-host for full control or use a managed provider.
+        And it's Apache-2.0 with no feature gating. For fast-growing products, data-residency needs, or anyone
+        wary of lock-in, that's decisive.
+      </p>
+
+      <div class="bg-gray-50 border border-gray-200 rounded-2xl p-8 mb-12">
+        <h2 class="text-2xl font-bold mb-4">Which should you choose?</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-bold text-secondary-700 mb-2">Pick Auth0 if…</h3>
+            <ul class="space-y-1 text-gray-700 text-sm list-disc list-inside">
+              <li>You want the fastest possible integration</li>
+              <li>Your user base is small enough that per-MAU is cheap</li>
+              <li>You value the Actions ecosystem + polished dashboard</li>
+              <li>You want zero ops and don't need to own the data</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-bold text-primary-700 mb-2">Pick Keycloak if…</h3>
+            <ul class="space-y-1 text-gray-700 text-sm list-disc list-inside">
+              <li>User growth would make per-MAU pricing painful</li>
+              <li>You need SAML / LDAP without an upsell</li>
+              <li>Data ownership, residency, or self-hosting matter</li>
+              <li>You want to avoid vendor lock-in</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-6">FAQ</h2>
+      <div class="space-y-6 mb-4">
+        {faqs.map((f) => (
+          <div class="border-b border-gray-100 pb-4">
+            <h3 class="font-semibold text-lg mb-1">{f.q}</h3>
+            <p class="text-gray-700">{f.a}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-12 pt-8 border-t border-gray-200">
+        <h2 class="text-xl font-bold mb-3">Related comparisons</h2>
+        <ul class="flex flex-wrap gap-3 text-sm">
+          <li><a href="/compare/keycloak-vs-okta" class="text-primary-600 font-medium hover:underline">Keycloak vs Okta →</a></li>
+          <li><a href="/compare/keycloak-vs-ory" class="text-primary-600 font-medium hover:underline">Keycloak vs Ory →</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-gradient-to-br from-primary-600 to-secondary-600 text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">Auth0 convenience, without the per-MAU bill</h2>
+      <p class="text-lg text-indigo-100 mb-8">
+        SavvyTechies is managed Keycloak on AWS — branded login, SAML, analytics, and an AI assistant that
+        configures it for you. You own your users. Free tier: up to 1,000 MAU and 3 realms.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://console.savvytechies.com/signup" class="bg-white text-primary-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition shadow-lg">Start Free</a>
+        <a href="/analyzer" class="border-2 border-white text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-primary-600 transition">Audit your Keycloak realm</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+</Layout>
