@@ -1,0 +1,201 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+
+const faqs = [
+  {
+    q: 'Is Ory better than Keycloak?',
+    a: 'Neither is strictly better. Ory (Kratos + Hydra) is a stateless, API-first, serverless-friendly identity toolkit — better for scale-to-zero cost and, with CockroachDB, true active-active multi-region. Keycloak is a batteries-included identity server — better for out-of-the-box SAML, server-rendered login themes, an admin console, and federation. Choose Ory for headless/global; choose Keycloak for full-featured and self-contained.',
+  },
+  {
+    q: 'Does Keycloak support CockroachDB for multi-region?',
+    a: 'No. Keycloak officially supports PostgreSQL/Aurora, MariaDB, SQL Server, and Oracle — not CockroachDB. Keycloak multi-region is active-passive (single writer plus async replication and failover). Ory natively supports CockroachDB, enabling active-active multi-region, multi-cloud, and per-row data residency.',
+  },
+  {
+    q: 'Can Ory replace Keycloak for SAML?',
+    a: 'Not cleanly. Ory Hydra is an OAuth 2.0/OIDC provider and does not act as a SAML Identity Provider in open source. Keycloak is a native SAML IdP. If tenant applications require SAML SSO, Keycloak has a clear advantage.',
+  },
+  {
+    q: 'Which is cheaper to run when idle?',
+    a: 'Ory on Lambda scales compute to zero, so it is cheaper when idle. But both still need a database and connection pooler, so there is a floor either way. Keycloak needs an always-on JVM, which we run cost-effectively (a single-node trial cell) and hibernate when unused.',
+  },
+];
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Keycloak vs Ory: Open-Source Identity Compared (2026)',
+      description:
+        'An honest, technical comparison of Keycloak and Ory (Kratos + Hydra) for building a modern IAM platform — architecture, serverless fit, SAML, branding, cost, and multi-region.',
+      author: { '@type': 'Organization', name: 'SavvyTechies' },
+      publisher: { '@type': 'Organization', name: 'SavvyTechies' },
+      datePublished: '2026-07-17',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<Layout
+  title="Keycloak vs Ory: Open-Source Identity Compared (2026) | SavvyTechies"
+  description="Honest, technical Keycloak vs Ory (Kratos + Hydra) comparison — architecture, serverless fit, SAML, branding, cost, and true multi-region with CockroachDB."
+>
+  <Navigation />
+
+  <section class="bg-gradient-to-br from-primary-600 to-secondary-600 text-white py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="uppercase tracking-widest text-indigo-200 text-sm font-semibold mb-3">Comparison</p>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">Keycloak vs. Ory</h1>
+      <p class="text-xl md:text-2xl text-indigo-100">
+        Two of the best open-source identity stacks — a stateful, batteries-included server vs. a stateless,
+        serverless-friendly toolkit. Here's the honest engineering trade-off.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose-lg">
+      <div class="bg-primary-50 border border-primary-100 rounded-2xl p-6 mb-12">
+        <h2 class="text-2xl font-bold mb-3">The short version</h2>
+        <ul class="space-y-2 text-gray-700">
+          <li>⚙️ <strong>Keycloak</strong> — a full identity <em>server</em> (SAML + OIDC, admin console,
+            server-rendered login themes, federation). Batteries included; runs an always-on JVM.</li>
+          <li>🧩 <strong>Ory</strong> (Kratos + Hydra) — stateless Go building blocks. API-first, headless,
+            fits Lambda/serverless, and — with CockroachDB — <strong>true active-active multi-region</strong>.</li>
+          <li>👉 Choose <strong>Keycloak</strong> for full-featured &amp; self-contained; choose <strong>Ory</strong>
+            for headless, scale-to-zero, or global data-residency.</li>
+        </ul>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-4">The fundamental difference</h2>
+      <p class="text-gray-700 mb-6">
+        Everything else follows from one choice: a <strong>stateful JVM monolith</strong> vs. <strong>stateless
+        Go services</strong>.
+      </p>
+      <div class="overflow-x-auto mb-12">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b-2 border-gray-200">
+              <th class="py-3 pr-4 font-semibold"></th>
+              <th class="py-3 px-4 font-semibold text-primary-700">Keycloak</th>
+              <th class="py-3 px-4 font-semibold text-secondary-700">Ory (Kratos + Hydra)</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Runtime</td><td class="py-3 px-4">Stateful JVM (1–2 GB, 30–60s cold start)</td><td class="py-3 px-4">Stateless Go (~100–300ms cold start)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Serverless fit</td><td class="py-3 px-4">Needs an always-on process</td><td class="py-3 px-4">Runs in Lambda; scale-to-zero</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Shape</td><td class="py-3 px-4">Monolith, batteries-included</td><td class="py-3 px-4">Composable, headless building blocks</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-4">Side-by-side</h2>
+      <div class="overflow-x-auto mb-12">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b-2 border-gray-200">
+              <th class="py-3 pr-4 font-semibold">Dimension</th>
+              <th class="py-3 px-4 font-semibold text-primary-700">Keycloak</th>
+              <th class="py-3 px-4 font-semibold text-secondary-700">Ory serverless</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Idle / trial cost</td><td class="py-3 px-4">Always-on floor (mitigable)</td><td class="py-3 px-4">Near-zero compute; DB + pooler floor remains</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Login UI / branding</td><td class="py-3 px-4">✅ Server-rendered themes</td><td class="py-3 px-4">You build the entire frontend</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Admin console</td><td class="py-3 px-4">✅ Built-in</td><td class="py-3 px-4">None in OSS (build via API)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">SAML IdP</td><td class="py-3 px-4">✅ Native</td><td class="py-3 px-4">⚠️ OAuth2/OIDC only</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Federation (LDAP/social)</td><td class="py-3 px-4">✅ Built-in</td><td class="py-3 px-4">Social/OIDC; no LDAP user-storage</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Per-tenant DB isolation</td><td class="py-3 px-4">Shared schema (realm-scoped)</td><td class="py-3 px-4">✅ Schema/DSN-per-tenant natural</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Multi-region / multi-cloud</td><td class="py-3 px-4">⚠️ Active-passive + failover</td><td class="py-3 px-4">✅ CockroachDB → active-active</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Licensing</td><td class="py-3 px-4">Apache-2.0, no feature gating</td><td class="py-3 px-4">Core Apache-2.0; some features paid (Ory Network/Enterprise)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-4">Where Ory genuinely wins: multi-region</h2>
+      <p class="text-gray-700 mb-4">
+        This is the one axis where Ory is architecturally ahead, not just different. Ory natively supports
+        <strong>CockroachDB</strong>, giving a real <strong>active-active, multi-region, multi-cloud</strong>
+        identity layer: every region serves reads <em>and</em> writes, the system survives a full region loss
+        with near-zero data loss and no failover procedure, and <strong>regional-by-row data domiciling</strong>
+        keeps (for example) EU users' records physically in the EU for GDPR.
+      </p>
+      <p class="text-gray-700 mb-12">
+        Keycloak cannot match this: CockroachDB is not a supported Keycloak database, and Keycloak's
+        multi-site pattern is active-<em>passive</em> — a single writer with async cross-region replication and
+        a failover step. If active-active global or per-row residency is a hard requirement, Ory + CockroachDB
+        is the stronger foundation.
+      </p>
+
+      <h2 class="text-3xl font-bold mb-4">Where Keycloak wins</h2>
+      <p class="text-gray-700 mb-12">
+        Everything that ships in the box: a native <strong>SAML Identity Provider</strong>, <strong>server-rendered
+        login themes</strong> (real per-tenant branding without building a frontend), a full <strong>admin
+        console</strong>, <strong>LDAP/AD and social federation</strong>, protocol mappers, MFA and passkeys, and
+        a fully Apache-2.0 license with no feature gating. For most B2B SaaS that need branded login and enterprise
+        SSO fast, Keycloak is less to build and less to license.
+      </p>
+
+      <div class="bg-gray-50 border border-gray-200 rounded-2xl p-8 mb-12">
+        <h2 class="text-2xl font-bold mb-4">Which should you choose?</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-bold text-primary-700 mb-2">Pick Keycloak if…</h3>
+            <ul class="space-y-1 text-gray-700 text-sm list-disc list-inside">
+              <li>You need SAML SSO for enterprise apps</li>
+              <li>You want branded login pages without building UI</li>
+              <li>You want an admin console + federation out of the box</li>
+              <li>You want zero license feature-gating</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-bold text-secondary-700 mb-2">Pick Ory if…</h3>
+            <ul class="space-y-1 text-gray-700 text-sm list-disc list-inside">
+              <li>You want serverless / scale-to-zero economics</li>
+              <li>You're building a fully custom, headless auth UX</li>
+              <li>You need active-active multi-region or data residency</li>
+              <li>You want strict per-tenant database isolation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-6">FAQ</h2>
+      <div class="space-y-6 mb-4">
+        {faqs.map((f) => (
+          <div class="border-b border-gray-100 pb-4">
+            <h3 class="font-semibold text-lg mb-1">{f.q}</h3>
+            <p class="text-gray-700">{f.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-gradient-to-br from-primary-600 to-secondary-600 text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">Want Keycloak without running it?</h2>
+      <p class="text-lg text-indigo-100 mb-8">
+        SavvyTechies is managed Keycloak on AWS — branded login, SAML, analytics, and an AI assistant that
+        configures it for you. Free tier: up to 1,000 MAU and 3 realms.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://console.savvytechies.com/signup" class="bg-white text-primary-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition shadow-lg">Start Free</a>
+        <a href="/analyzer" class="border-2 border-white text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-primary-600 transition">Audit your Keycloak realm</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+</Layout>
