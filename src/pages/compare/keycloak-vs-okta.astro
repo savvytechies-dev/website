@@ -1,0 +1,192 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+
+const faqs = [
+  {
+    q: 'Is Keycloak a real alternative to Okta?',
+    a: 'For customer identity (CIAM) and B2B SaaS SSO, yes — Keycloak covers OIDC, SAML, and LDAP with multi-tenant realms and no per-user pricing. For large-enterprise workforce IAM with lifecycle management, SCIM provisioning at scale, and Okta’s 7,000+ pre-built app integrations (OIN), Okta is more complete. Managed Keycloak is the strong, far cheaper choice when you’re adding auth to a product rather than governing employee access to hundreds of SaaS apps.',
+  },
+  {
+    q: 'Keycloak vs Okta pricing — what’s the difference?',
+    a: 'Okta is priced per user and per feature with an enterprise sales motion; costs climb with your directory size and the modules you enable. Keycloak is open-source — you pay for infrastructure or a flat managed fee, not per seat. For customer-facing or fast-growing user bases, that gap is large.',
+  },
+  {
+    q: 'Does Keycloak have an app integration network like Okta OIN?',
+    a: 'No. Okta’s Integration Network offers thousands of pre-built, maintained app connectors — a genuine advantage for workforce IT. Keycloak integrates via open standards (OIDC/SAML), so you wire apps yourself. If your value is connecting employees to many off-the-shelf SaaS apps, Okta’s catalog is a real differentiator.',
+  },
+  {
+    q: 'Okta vs Keycloak — workforce vs customer identity?',
+    a: 'Okta started in workforce identity (employee access, lifecycle, governance) and added CIAM via its Auth0 acquisition. Keycloak is strongest as a customer/B2B identity server you embed in your product. Pick Okta for enterprise workforce IAM + IGA; pick Keycloak to give your application login, SSO, and multi-tenant identity without per-user cost or lock-in.',
+  },
+  {
+    q: 'Can Keycloak do SCIM provisioning and lifecycle like Okta?',
+    a: 'Partially. Keycloak supports SCIM via extensions and has basic lifecycle features, but Okta’s provisioning, deprovisioning, and identity-governance (IGA) capabilities are deeper and more turnkey. If automated joiner/mover/leaver flows across many apps are core to you, Okta leads; if you need standards-based auth for your own product, Keycloak is sufficient and cheaper.',
+  },
+];
+
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: 'Keycloak vs Okta: Open-Source Identity Alternative (2026)',
+      description:
+        'Keycloak vs Okta compared — pricing, lock-in, workforce vs customer identity, SAML/SCIM, the app integration network, and hosting.',
+      author: { '@type': 'Organization', name: 'SavvyTechies' },
+      publisher: { '@type': 'Organization', name: 'SavvyTechies' },
+      datePublished: '2026-07-18',
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+  ],
+};
+---
+
+<Layout
+  title="Keycloak vs Okta: Open-Source Identity Alternative (2026) | SavvyTechies"
+  description="Keycloak vs Okta compared — pricing, lock-in, workforce vs customer identity, SAML/SCIM, and the app integration network. Is managed Keycloak a real Okta alternative?"
+>
+  <Navigation />
+
+  <section class="bg-gradient-to-br from-primary-600 to-secondary-600 text-white py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="uppercase tracking-widest text-indigo-200 text-sm font-semibold mb-3">Comparison</p>
+      <h1 class="text-4xl md:text-6xl font-bold mb-6">Keycloak vs. Okta</h1>
+      <p class="text-xl md:text-2xl text-indigo-100">
+        The enterprise identity incumbent vs. the open-source standard. Where each one actually fits.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-primary-50 border border-primary-100 rounded-2xl p-6 mb-12">
+        <h2 class="text-2xl font-bold mb-3">The short version</h2>
+        <ul class="space-y-2 text-gray-700">
+          <li>🏢 <strong>Okta</strong> — the enterprise IAM incumbent: a huge pre-built app-integration network
+            (OIN), workforce lifecycle &amp; provisioning, adaptive MFA, and governance. Deep and polished — priced
+            per user with an enterprise sales motion.</li>
+          <li>🔓 <strong>Keycloak</strong> — an open-source identity server: OIDC, SAML, LDAP, themes, admin
+            console, multi-tenant realms — with <strong>no per-seat cost</strong>. Self-hostable or managed.</li>
+          <li>👉 Choose <strong>Okta</strong> for enterprise workforce IAM at scale; choose <strong>Keycloak</strong>
+            to add standards-based auth &amp; SSO to your product without per-user cost or lock-in.</li>
+        </ul>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-4">The fundamental difference</h2>
+      <p class="text-gray-700 mb-8">
+        Okta is a <strong>proprietary enterprise identity suite priced per user</strong>, strongest at workforce
+        access and governance. Keycloak is an <strong>open-source identity server you own</strong>, strongest at
+        embedding auth in your own applications.
+      </p>
+
+      <h2 class="text-3xl font-bold mb-4">Side-by-side</h2>
+      <div class="overflow-x-auto mb-12">
+        <table class="w-full text-left border-collapse text-sm">
+          <thead>
+            <tr class="border-b-2 border-gray-200">
+              <th class="py-3 pr-4 font-semibold">Dimension</th>
+              <th class="py-3 px-4 font-semibold text-primary-700">Keycloak</th>
+              <th class="py-3 px-4 font-semibold text-secondary-700">Okta</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Best fit</td><td class="py-3 px-4">Customer / B2B identity &amp; SSO server</td><td class="py-3 px-4">Enterprise workforce IAM (+ CIAM via Auth0)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Pricing model</td><td class="py-3 px-4">✅ Open-source; infra / flat managed</td><td class="py-3 px-4">Per-user + per-module</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">App integration network</td><td class="py-3 px-4">Standards-based (wire via OIDC/SAML)</td><td class="py-3 px-4">✅ OIN — 7,000+ pre-built</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">SAML IdP</td><td class="py-3 px-4">✅ Native, free</td><td class="py-3 px-4">✅ Yes</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">SCIM provisioning / IGA</td><td class="py-3 px-4">Limited (extensions)</td><td class="py-3 px-4">✅ Strong (lifecycle, governance)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Hosting</td><td class="py-3 px-4">Self-host or managed</td><td class="py-3 px-4">SaaS only</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Source & data ownership</td><td class="py-3 px-4">✅ Apache-2.0; own your data</td><td class="py-3 px-4">Closed; proprietary directory</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Login branding</td><td class="py-3 px-4">✅ Full theme control</td><td class="py-3 px-4">Customizable hosted</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 pr-4 font-medium">Vendor lock-in</td><td class="py-3 px-4">✅ Low (portable standards)</td><td class="py-3 px-4">High</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-4">Where Okta wins</h2>
+      <p class="text-gray-700 mb-8">
+        Okta is the more complete <strong>workforce identity + governance</strong> platform. The OIN gives you
+        thousands of maintained app integrations out of the box; provisioning, deprovisioning, and identity
+        governance (IGA) are mature; adaptive MFA and device trust are enterprise-grade; and the compliance and
+        ecosystem depth are hard to replicate. If you're an enterprise IT team managing employee access to
+        hundreds of SaaS apps, Okta is built for exactly that.
+      </p>
+
+      <h2 class="text-3xl font-bold mb-4">Where Keycloak wins</h2>
+      <p class="text-gray-700 mb-12">
+        No per-user pricing — a decisive difference for customer-facing or fast-growing user bases. It's
+        open-source and portable (self-host or managed, no lock-in), SAML and LDAP are included, and you own your
+        directory and can export on open standards. For giving <em>your product</em> login, SSO, and multi-tenant
+        customer identity, Keycloak delivers the same standards Okta does — at a fraction of the cost.
+      </p>
+
+      <div class="bg-gray-50 border border-gray-200 rounded-2xl p-8 mb-12">
+        <h2 class="text-2xl font-bold mb-4">Which should you choose?</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-bold text-secondary-700 mb-2">Pick Okta if…</h3>
+            <ul class="space-y-1 text-gray-700 text-sm list-disc list-inside">
+              <li>You run enterprise <em>workforce</em> IAM</li>
+              <li>You need OIN's pre-built app integrations</li>
+              <li>You need SCIM lifecycle + governance (IGA) at scale</li>
+              <li>Compliance breadth and ecosystem are priorities</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-bold text-primary-700 mb-2">Pick Keycloak if…</h3>
+            <ul class="space-y-1 text-gray-700 text-sm list-disc list-inside">
+              <li>You're adding auth/SSO to your own SaaS product</li>
+              <li>You want to avoid per-user pricing + lock-in</li>
+              <li>You need multi-tenant customer identity (realms)</li>
+              <li>You want SAML/OIDC without an enterprise upsell</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-6">FAQ</h2>
+      <div class="space-y-6 mb-4">
+        {faqs.map((f) => (
+          <div class="border-b border-gray-100 pb-4">
+            <h3 class="font-semibold text-lg mb-1">{f.q}</h3>
+            <p class="text-gray-700">{f.a}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-12 pt-8 border-t border-gray-200">
+        <h2 class="text-xl font-bold mb-3">Related comparisons</h2>
+        <ul class="flex flex-wrap gap-3 text-sm">
+          <li><a href="/compare/keycloak-vs-auth0" class="text-primary-600 font-medium hover:underline">Keycloak vs Auth0 →</a></li>
+          <li><a href="/compare/keycloak-vs-ory" class="text-primary-600 font-medium hover:underline">Keycloak vs Ory →</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-gradient-to-br from-primary-600 to-secondary-600 text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">Standards-based identity, without per-seat pricing</h2>
+      <p class="text-lg text-indigo-100 mb-8">
+        SavvyTechies is managed Keycloak on AWS — OIDC, SAML, branded login, and an AI assistant that configures
+        it for you. Own your directory. Free tier: up to 1,000 MAU and 3 realms.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://console.savvytechies.com/signup" class="bg-white text-primary-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition shadow-lg">Start Free</a>
+        <a href="/analyzer" class="border-2 border-white text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-primary-600 transition">Audit your Keycloak realm</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+</Layout>
