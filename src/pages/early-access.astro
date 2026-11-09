@@ -1,0 +1,157 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Request Early Access - SavvyTechies" description="Request early access to SavvyTechies managed Keycloak. Tell us about your use case and we'll be in touch.">
+  <Navigation />
+
+  <section class="bg-gradient-to-br from-primary-600 to-secondary-600 text-white py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Request early access</h1>
+      <p class="text-xl text-indigo-100">
+        We're onboarding new customers by invitation. Tell us a little about your use case and
+        we'll get back to you personally.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-xl shadow-xl p-8">
+        <div id="form-message" class="hidden p-4 rounded-lg mb-6" role="status"></div>
+
+        <form id="early-access-form" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Name <span class="text-red-500">*</span></label>
+              <input type="text" id="name" name="name" required autocomplete="name"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Work email <span class="text-red-500">*</span></label>
+              <input type="email" id="email" name="email" required autocomplete="email"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+            </div>
+            <div>
+              <label for="company" class="block text-sm font-medium text-gray-700 mb-2">Company</label>
+              <input type="text" id="company" name="company" autocomplete="organization"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+              <input type="tel" id="phone" name="phone" autocomplete="tel"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent" />
+            </div>
+            <div>
+              <label for="size" class="block text-sm font-medium text-gray-700 mb-2">Company size</label>
+              <select id="size" name="size"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                <option value="">Select…</option>
+                <option>1–50</option>
+                <option>51–200</option>
+                <option>201–1,000</option>
+                <option>1,000+</option>
+              </select>
+            </div>
+            <div>
+              <label for="usecase" class="block text-sm font-medium text-gray-700 mb-2">Primary use case</label>
+              <select id="usecase" name="usecase"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                <option value="">Select…</option>
+                <option>Customer identity (CIAM)</option>
+                <option>Workforce SSO</option>
+                <option>Migrating from Auth0 / Okta / other</option>
+                <option>Self-hosted Keycloak → managed</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Anything else we should know?</label>
+            <textarea id="notes" name="notes" rows="4"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"></textarea>
+          </div>
+
+          <!-- Honeypot: real visitors never see or fill this. -->
+          <div class="hidden" aria-hidden="true">
+            <label for="website">Website</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <button type="submit" id="submit-btn"
+            class="w-full bg-secondary-600 text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-secondary-700 transition disabled:opacity-60">
+            Request Early Access
+          </button>
+          <p class="text-sm text-gray-500 text-center">
+            We'll email you a confirmation and follow up personally. Prefer email?
+            <a href="mailto:govind.prathi@savvytechies.com?subject=Early%20access%20request" class="text-primary-600 underline">govind.prathi@savvytechies.com</a>
+          </p>
+        </form>
+        <noscript>
+          <p class="mt-4 text-sm text-gray-600">JavaScript is required to submit this form — or email
+            <a href="mailto:govind.prathi@savvytechies.com?subject=Early%20access%20request" class="text-primary-600 underline">govind.prathi@savvytechies.com</a>.</p>
+        </noscript>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<script>
+  // Posts to the same contact API (Lambda -> SES) used by the home-page form:
+  // notifies the SavvyTechies team and emails the submitter a confirmation.
+  const ENDPOINT = 'https://0br071yj0d.execute-api.us-east-1.amazonaws.com';
+  const form = document.getElementById('early-access-form') as HTMLFormElement | null;
+  const btn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+  const msg = document.getElementById('form-message');
+
+  function show(text: string, ok: boolean) {
+    if (!msg) return;
+    msg.textContent = text;
+    msg.className = 'p-4 rounded-lg mb-6 ' + (ok ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800');
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form || !btn) return;
+    const f = new FormData(form);
+    if (f.get('website')) { show('Thank you! We\'ll be in touch soon.', true); form.reset(); return; } // honeypot
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    const message = [
+      'EARLY ACCESS REQUEST',
+      '',
+      `Company size: ${f.get('size') || 'Not provided'}`,
+      `Use case: ${f.get('usecase') || 'Not provided'}`,
+      '',
+      `Notes: ${f.get('notes') || 'None'}`,
+    ].join('\n');
+
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: f.get('name'),
+          email: f.get('email'),
+          company: f.get('company'),
+          phone: f.get('phone'),
+          message,
+        }),
+      });
+      if (!res.ok) throw new Error('bad status ' + res.status);
+      form.reset();
+      show('Thank you! Your request has been received — check your inbox for a confirmation. We\'ll be in touch soon.', true);
+    } catch {
+      show('Sorry, something went wrong. Please try again or email govind.prathi@savvytechies.com directly.', false);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Request Early Access';
+    }
+  });
+</script>
